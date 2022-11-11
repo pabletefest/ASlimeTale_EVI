@@ -5,8 +5,8 @@ using UnityEngine;
 public class SlimeMove : MonoBehaviour
 {
     private CharacterController controller;
-    private float playerSpeed = 5.0f;
-    private float turnSpeed = 90.0f;
+    public float playerSpeed = 5.0f;
+    public float turnSpeed = 90.0f;
     private Animator anim;
     private Vector3 vel;
 
