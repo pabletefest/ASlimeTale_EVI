@@ -3133,7 +3133,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.22975291, y: -0.000000016746089, z: 0.0000000039532155, w: 0.973249}
+  m_LocalRotation: {x: 0.22975291, y: 0.000000016746096, z: -0.0000000039532173, w: 0.973249}
   m_LocalPosition: {x: 843.45044, y: 55.743084, z: 4.34}
   m_LocalScale: {x: 1.0002372, y: 0.9663601, z: 1.067018}
   m_Children: []
@@ -6227,6 +6227,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 757834714}
     m_Modifications:
+    - target: {fileID: 1926623616552158096, guid: f8e4ed5f108f01d4f8a3113e26ddb3a1,
+        type: 3}
+      propertyPath: baseWindPower
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1926623616552158096, guid: f8e4ed5f108f01d4f8a3113e26ddb3a1,
+        type: 3}
+      propertyPath: burstsPower
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1926623616552158096, guid: f8e4ed5f108f01d4f8a3113e26ddb3a1,
+        type: 3}
+      propertyPath: microPower
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1926623616552158097, guid: f8e4ed5f108f01d4f8a3113e26ddb3a1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6290,7 +6305,7 @@ PrefabInstance:
     - target: {fileID: 1926623616552158103, guid: f8e4ed5f108f01d4f8a3113e26ddb3a1,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f8e4ed5f108f01d4f8a3113e26ddb3a1, type: 3}
@@ -6536,7 +6551,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2123939709}
-  m_LocalRotation: {x: 0.22975291, y: -0.000000016746089, z: 0.0000000039532155, w: 0.973249}
+  m_LocalRotation: {x: 0.22975291, y: 0.000000016746096, z: -0.0000000039532173, w: 0.973249}
   m_LocalPosition: {x: 843.45044, y: 55.743084, z: 4.34}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
