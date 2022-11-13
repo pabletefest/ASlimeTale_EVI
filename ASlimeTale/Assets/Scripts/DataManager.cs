@@ -2,13 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CombatManager : MonoBehaviour
+public class DataManager : MonoBehaviour
 {
-    [SerializeField]
-    private List<ScriptableObject> players;
-    
-    [SerializeField]
-    private List<ScriptableObject> enemies;
+    //[SerializeField]
+    //private List<IMonsterInfo> a;
 
     // Start is called before the first frame update
     void Start()
