@@ -27,6 +27,7 @@ public class EnemySO : ScriptableObject
         HOLY,
         DARK,
         GROUND,
+        WIND,
         PLANT
     }
 

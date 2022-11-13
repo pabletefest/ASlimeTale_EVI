@@ -13,15 +13,32 @@ public class SkillSO : ScriptableObject
     
     public enum Effect
     {
+        NONE,
         BURN,
         FREEZE,
         POISON,
         STUN,
         CRITICAL,
         BLIND,
-        ONESHOT
+        DEATH,
+        CERTAIN
     }
 
+    public enum Type
+    {
+        PHYSICAL,
+        FIRE,
+        WATER,
+        ICE,
+        ELECTRIC,
+        HOLY,
+        DARK,
+        GROUND,
+        WIND,
+        PLANT
+    }
+
+    [SerializeField] private Type type;
     [SerializeField] private Effect sideEffect;
     [SerializeField] private float effectChance;
 }

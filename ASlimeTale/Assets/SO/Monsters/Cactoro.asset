@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9bc26443ca1b41e4ebee7fb5e3555071, type: 3}
-  m_Name: Slime
+  m_Name: Cactoro
   m_EditorClassIdentifier: 
-  monsterName: Slime
-  baseMaxHP: 70
+  monsterName: Cactoro
+  baseMaxHP: 90
   baseMaxMP: 70
-  baseAttack: 70
-  baseDefense: 70
-  baseMagic: 70
-  baseResistance: 70
-  baseSpeed: 70
-  barIcon: {fileID: 21300000, guid: 354bdfa689c7845d58c46f7a3db8bdcd, type: 3}
+  baseAttack: 90
+  baseDefense: 90
+  baseMagic: 50
+  baseResistance: 50
+  baseSpeed: 60
+  barIcon: {fileID: 21300000, guid: 7172543f3e6c7b3459a7ed385093d555, type: 3}
