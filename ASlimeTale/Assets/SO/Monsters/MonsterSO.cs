@@ -7,6 +7,7 @@ using UnityEngine;
 public class MonsterSO : ScriptableObject
 {
     [SerializeField] private string monsterName;
+    [SerializeField] private GameObject monsterPrefab;
 
     [SerializeField] private uint baseMaxHP;
     [SerializeField] private uint baseMaxMP;
