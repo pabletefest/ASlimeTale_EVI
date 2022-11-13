@@ -4,63 +4,59 @@ using UnityEngine;
 
 public class DataManager : MonoBehaviour
 {
-    const string PLAYER_TEAM_KEY = "PlayerTeam";
-    const string MONSTER_LEVEL_KEY = "MonsterLevel";
-    const string MONSTER_HP_KEY = "MonsterCurrentHP";
-    const string MONSTER_MP_KEY = "MonsterCurrentMP";
-    const string MONSTER_EXP_KEY = "MonsterCurrentEXP";
-    const string MONSTER_SKILLS_KEY = "MonsterSkills";
-
     [SerializeField]
-    private static List<MonsterInfo> monstersTeam;
+    private Dictionary<string, MonsterInfo> monstersTeam;
+
+    //public MonsterInfo this[string key]
+    //{
+    //    get => monstersTeam[key];
+    //    set => monstersTeam[key] = value;
+    //}
 
     // Start is called before the first frame update
     void Start()
-    {
-        monstersTeam = new List<MonsterInfo>();
+    {   
+        monstersTeam = new Dictionary<string, MonsterInfo>();
 
-        string playerTeam = PlayerPrefs.GetString(PLAYER_TEAM_KEY, "Slime");
+        string playerTeam = PlayerPrefs.GetString(UtilsHelper.PLAYER_TEAM_KEY, "Slime");
 
         foreach (var member in playerTeam.Split(','))
         {
             var monsterInfo = new MonsterInfo(member);
 
-            monsterInfo.level = (uint)PlayerPrefs.GetInt(FormatKeyString(MONSTER_LEVEL_KEY, member), 1);
-            monsterInfo.currentHP = (uint)PlayerPrefs.GetInt(FormatKeyString(MONSTER_HP_KEY, member), (int)monsterInfo.getMaxHP());
-            monsterInfo.currentMP = (uint)PlayerPrefs.GetInt(FormatKeyString(MONSTER_MP_KEY, member), (int)monsterInfo.getMaxMP());
-            monsterInfo.currentExp = (uint)PlayerPrefs.GetInt(FormatKeyString(MONSTER_EXP_KEY, member), 0);
+            monsterInfo.level = (uint)PlayerPrefs.GetInt(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_LEVEL_KEY, member), 1);
+            monsterInfo.currentHP = (uint)PlayerPrefs.GetInt(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_HP_KEY, member), (int)monsterInfo.getMaxHP());
+            monsterInfo.currentMP = (uint)PlayerPrefs.GetInt(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_MP_KEY, member), (int)monsterInfo.getMaxMP());
+            monsterInfo.currentExp = (uint)PlayerPrefs.GetInt(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_EXP_KEY, member), 0);
 
-            string skillNames = PlayerPrefs.GetString(FormatKeyString(MONSTER_SKILLS_KEY, member), "Ataque");
+            string skillNames = PlayerPrefs.GetString(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_SKILLS_KEY, member), "Ataque");
 
             foreach (var skillName in skillNames.Split(','))
                 monsterInfo.Skills.Add(skillName, new SkillData(Resources.Load<SkillSO>(String.Format($"SO/Skills/{skillName}"))));
 
-            monstersTeam.Add(monsterInfo);
+            monstersTeam.Add(member, monsterInfo);
         }
     }
 
-    public static void SaveTeamMembersData()
+    public MonsterInfo getTeamMemberByName(string monsterName) => monstersTeam[monsterName];
+
+    public void SaveTeamMembersData()
     {
         List<string> teamNames = new List<string>();
 
-        foreach (var monsterInfo in monstersTeam)
+        foreach (var monsterInfo in monstersTeam.Values)
         {
             string monsterName = monsterInfo.getName();
             teamNames.Add(monsterName);
-            PlayerPrefs.SetInt(FormatKeyString(MONSTER_LEVEL_KEY, monsterName), (int)monsterInfo.level);
-            PlayerPrefs.SetInt(FormatKeyString(MONSTER_HP_KEY, monsterName), (int)monsterInfo.currentHP);
-            PlayerPrefs.SetInt(FormatKeyString(MONSTER_MP_KEY, monsterName), (int)monsterInfo.currentMP);
-            PlayerPrefs.SetInt(FormatKeyString(MONSTER_EXP_KEY, monsterName), (int)monsterInfo.currentExp);
+            PlayerPrefs.SetInt(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_LEVEL_KEY, monsterName), (int)monsterInfo.level);
+            PlayerPrefs.SetInt(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_HP_KEY, monsterName), (int)monsterInfo.currentHP);
+            PlayerPrefs.SetInt(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_MP_KEY, monsterName), (int)monsterInfo.currentMP);
+            PlayerPrefs.SetInt(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_EXP_KEY, monsterName), (int)monsterInfo.currentExp);
             
-            PlayerPrefs.SetString(FormatKeyString(MONSTER_SKILLS_KEY, monsterName), String.Join(",", monsterInfo.Skills.Keys));
+            PlayerPrefs.SetString(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_SKILLS_KEY, monsterName), String.Join(",", monsterInfo.Skills.Keys));
         }
 
-        PlayerPrefs.SetString(PLAYER_TEAM_KEY, String.Join(",", teamNames));
-    }
-
-    public static string FormatKeyString(string key, string name)
-    {
-        return String.Format($"{key}_{name}");
+        PlayerPrefs.SetString(UtilsHelper.PLAYER_TEAM_KEY, String.Join(",", teamNames));
     }
 
     void OnDestroy()
