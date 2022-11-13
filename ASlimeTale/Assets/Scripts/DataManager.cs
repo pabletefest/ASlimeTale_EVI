@@ -33,7 +33,7 @@ public class DataManager : MonoBehaviour
             string skillNames = PlayerPrefs.GetString(FormatKeyString(MONSTER_SKILLS_KEY, member), "Ataque");
 
             foreach (var skillName in skillNames.Split(','))
-                monsterInfo.skills.Add(skillName, new SkillData(Resources.Load<SkillSO>(String.Format($"SO/Skills/{skillName}"))));
+                monsterInfo.Skills.Add(skillName, new SkillData(Resources.Load<SkillSO>(String.Format($"SO/Skills/{skillName}"))));
 
             monstersTeam.Add(monsterInfo);
         }
@@ -52,7 +52,7 @@ public class DataManager : MonoBehaviour
             PlayerPrefs.SetInt(FormatKeyString(MONSTER_MP_KEY, monsterName), (int)monsterInfo.currentMP);
             PlayerPrefs.SetInt(FormatKeyString(MONSTER_EXP_KEY, monsterName), (int)monsterInfo.currentExp);
             
-            PlayerPrefs.SetString(FormatKeyString(MONSTER_SKILLS_KEY, monsterName), String.Join(",", monsterInfo.skills.Keys));
+            PlayerPrefs.SetString(FormatKeyString(MONSTER_SKILLS_KEY, monsterName), String.Join(",", monsterInfo.Skills.Keys));
         }
 
         PlayerPrefs.SetString(PLAYER_TEAM_KEY, String.Join(",", teamNames));
@@ -65,6 +65,6 @@ public class DataManager : MonoBehaviour
 
     void OnDestroy()
     {
-        //SaveTeamMembersData();
+        SaveTeamMembersData();
     }
 }

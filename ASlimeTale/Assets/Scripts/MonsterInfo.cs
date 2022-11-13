@@ -11,21 +11,9 @@ public class MonsterInfo
     public uint currentMP { get; set; }
     public uint currentExp { get; set; }
 
-    public Dictionary<string, SkillData> skills 
-    {
-        get
-        {
-            if (skills == null)
-                return new Dictionary<string, SkillData>();
+    private Dictionary<string, SkillData> skills;
 
-            return skills;
-        }
-
-        set 
-        {
-            skills = value;
-        } 
-    }
+    public Dictionary<string, SkillData> Skills => skills;
 
     public string getName() => monsterSo.monsterName;
 
@@ -42,5 +30,6 @@ public class MonsterInfo
     {
         // TODO: LOAD FROM CENTRALIZED LOADER
         monsterSo = Resources.Load<MonsterSO>(string.Format($"SO/Monsters/{monsterName}"));
+        skills = new Dictionary<string, SkillData>();
     }
 }
