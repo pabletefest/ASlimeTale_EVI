@@ -21,18 +21,41 @@ public class MenuBatalla : MonoBehaviour
     [SerializeField]
     private List<Text> actionTexts;
 
-
+    int currentAction = 0;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        UpdateActionSelection(currentAction);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            if(currentAction == actionTexts.Count - 1)
+            {
+                currentAction = 0;
+            }
+            else
+            {
+                currentAction += 1;
+            }
+            UpdateActionSelection(currentAction);
+        }
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            if (currentAction == 0)
+            {
+                currentAction = actionTexts.Count - 1;
+            }
+            else
+            {
+                currentAction -= 1;
+            }
+            UpdateActionSelection(currentAction);
+        }
     }
 
     public void UpdateActionSelection(int selectedAction)
@@ -48,6 +71,7 @@ public class MenuBatalla : MonoBehaviour
             }
         }
     }
+
 
     public void EnableSkillSelection(bool enabled)
     {
