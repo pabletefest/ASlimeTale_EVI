@@ -21,6 +21,9 @@ public class MenuBatalla : MonoBehaviour
     [SerializeField]
     private List<Text> actionTexts;
 
+    [SerializeField]
+    private GameObject meteorShower;
+
     int currentAction = 0;
 
     // Start is called before the first frame update
@@ -55,6 +58,13 @@ public class MenuBatalla : MonoBehaviour
                 currentAction -= 1;
             }
             UpdateActionSelection(currentAction);
+        }
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            if (currentAction == 0)
+            {
+                meteorShower.SetActive(true);
+            }
         }
     }
 
