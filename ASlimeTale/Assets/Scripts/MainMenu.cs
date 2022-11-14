@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class MainMenu : MonoBehaviour
 {
+
+    public GameObject mainMenu;
+    public GameObject credits;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,5 +22,22 @@ public class MainMenu : MonoBehaviour
     public void StartGame()
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene("LlanuraAfable");
+    }
+
+    public void ShowCredits()
+	{
+        mainMenu.SetActive(false);
+        credits.SetActive(true);
+	}
+
+    public void ReturnToMenu()
+	{
+        mainMenu.SetActive(true);
+        credits.SetActive(false);
+    }
+
+    public void ExitGame()
+	{
+        Application.Quit();
     }
 }
