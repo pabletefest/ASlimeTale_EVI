@@ -16,6 +16,7 @@ public class DataManager : MonoBehaviour
     void Awake()
     {
         Cursor.visible = false;
+        Time.timeScale = 1;
     }
 
     // Start is called before the first frame update
