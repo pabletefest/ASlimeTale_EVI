@@ -5,9 +5,12 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Inicio/Old/Menu.unity
     guid: d624ab256f97fe641a879e8acb2d4547
+  - enabled: 1
+    path: Assets/Scenes/Inicio/Menu.unity
+    guid: 506358690fb0ea8408a9a10059a1d63d
   - enabled: 1
     path: Assets/Scenes/LlanuraAfable/LlanuraAfable.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab

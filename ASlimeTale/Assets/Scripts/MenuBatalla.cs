@@ -65,6 +65,10 @@ public class MenuBatalla : MonoBehaviour
             {
                 meteorShower.SetActive(true);
             }
+            if (currentAction == 4)
+			{
+                UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");
+            }
         }
     }
 

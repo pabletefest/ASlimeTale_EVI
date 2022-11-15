@@ -681,7 +681,7 @@ GameObject:
   - component: {fileID: 1187309413}
   - component: {fileID: 1187309412}
   m_Layer: 5
-  m_Name: Text
+  m_Name: Texto
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -738,7 +738,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\xC1ndale limo, dame taco con chilaquile y me unir\xE9."
+  m_Text: "\xC1ndale limo, dame tacos al pastor y me unir\xE9 a ti."
 --- !u!222 &1187309413
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1237,7 +1237,7 @@ GameObject:
   - component: {fileID: 1652822732}
   - component: {fileID: 1652822731}
   m_Layer: 5
-  m_Name: Image
+  m_Name: FondoTexto
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
