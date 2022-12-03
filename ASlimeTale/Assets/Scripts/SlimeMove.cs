@@ -18,8 +18,13 @@ public class SlimeMove : MonoBehaviour
 
     void Update()
     {
-        transform.Rotate(0, Input.GetAxis("Horizontal") * turnSpeed * Time.deltaTime, 0);
-        vel = transform.forward * Input.GetAxis("Vertical") * playerSpeed;
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
+
+        transform.Rotate(0, horizontalInput * turnSpeed * Time.deltaTime, 0);
+
+        vel = transform.forward * verticalInput * playerSpeed;
+
         controller.SimpleMove(vel);
 
         if(vel != Vector3.zero)
