@@ -7837,6 +7837,11 @@ PrefabInstance:
       propertyPath: turnSpeed
       value: 180
       objectReference: {fileID: 0}
+    - target: {fileID: 3645206156270119624, guid: 4b60fbfcc2efe9c4b920fe090f04bfe3,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3827187576940551370, guid: 4b60fbfcc2efe9c4b920fe090f04bfe3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7929,6 +7934,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 561296629}
     m_Modifications:
+    - target: {fileID: 112203662883100210, guid: 8e40390112cbdbe4e87f9a8843397425,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5216175323679667303, guid: 8e40390112cbdbe4e87f9a8843397425,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8584120576216728207, guid: 8e40390112cbdbe4e87f9a8843397425,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7989,5 +8004,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cactoro
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5216175323679667303, guid: 8e40390112cbdbe4e87f9a8843397425, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 8e40390112cbdbe4e87f9a8843397425, type: 3}

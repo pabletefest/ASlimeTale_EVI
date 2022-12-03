@@ -18,12 +18,14 @@ public class MainMenu : MonoBehaviour
     {
 		if (Input.GetKeyDown(KeyCode.Return))
 		{
-            UnityEngine.SceneManagement.SceneManager.LoadScene("LlanuraAfable");
+            StartGame();
         }
     }
 
     public void StartGame()
     {
+        Cursor.visible = false;
+        Time.timeScale = 1;
         UnityEngine.SceneManagement.SceneManager.LoadScene("LlanuraAfable");
     }
 

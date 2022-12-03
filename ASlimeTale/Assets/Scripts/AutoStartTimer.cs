@@ -12,6 +12,7 @@ public class AutoStartTimer : MonoBehaviour
     void Awake()
     {
         lastMousePos = Input.mousePosition;
+        DataManager.InstanceDB.getTeamMemberByName("Slime");
     }
 
     // Update is called once per frame

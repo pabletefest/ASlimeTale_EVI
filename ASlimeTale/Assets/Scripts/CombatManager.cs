@@ -81,12 +81,40 @@ public class CombatManager : MonoBehaviour
 
     void InstantiatePlayers()
     {
-        PlayerOne = TESTPrefabSlime;
+        players.Clear();
+
+        var names = DataManager.InstanceDB.getMonstersTeamNames();
+
+        foreach (var name in names)
+        {
+            var monster = Resources.Load<MonsterSO>(string.Format($"SO/Monsters/{name}"));
+            players.Add(monster);
+        }
+
+        switch (players.Count)
+        {
+            case 1:
+                PlayerOne = Instantiate(players[0].monsterPrefab, OnePlayerPosition.transform.Find("PositionPlayer1").transform.position, OnePlayerPosition.transform.Find("PositionPlayer1").transform.rotation);
+                break;
+            case 2:
+                PlayerOne = Instantiate(players[0].monsterPrefab, TwoPlayerPosition.transform.Find("PositionPlayer1").transform.position, TwoPlayerPosition.transform.Find("PositionPlayer1").transform.rotation);
+                PlayerTwo = Instantiate(players[1].monsterPrefab, TwoPlayerPosition.transform.Find("PositionPlayer2").transform.position, TwoPlayerPosition.transform.Find("PositionPlayer2").transform.rotation);
+                break;
+            case 3:
+                PlayerOne = Instantiate(players[0].monsterPrefab, ThreePlayerPosition.transform.Find("PositionPlayer1").transform.position, ThreePlayerPosition.transform.Find("PositionPlayer1").transform.rotation);
+                PlayerTwo = Instantiate(players[1].monsterPrefab, ThreePlayerPosition.transform.Find("PositionPlayer2").transform.position, ThreePlayerPosition.transform.Find("PositionPlayer2").transform.rotation);
+                PlayerThree = Instantiate(players[2].monsterPrefab, ThreePlayerPosition.transform.Find("PositionPlayer3").transform.position, ThreePlayerPosition.transform.Find("PositionPlayer3").transform.rotation);
+                break;
+            case 4:
+                PlayerOne = Instantiate(players[0].monsterPrefab, FourPlayerPosition.transform.Find("PositionPlayer1").transform.position, FourPlayerPosition.transform.Find("PositionPlayer1").transform.rotation);
+                PlayerTwo = Instantiate(players[1].monsterPrefab, FourPlayerPosition.transform.Find("PositionPlayer2").transform.position, FourPlayerPosition.transform.Find("PositionPlayer2").transform.rotation);
+                PlayerThree = Instantiate(players[2].monsterPrefab, FourPlayerPosition.transform.Find("PositionPlayer3").transform.position, FourPlayerPosition.transform.Find("PositionPlayer3").transform.rotation);
+                PlayerFour = Instantiate(players[3].monsterPrefab, FourPlayerPosition.transform.Find("PositionPlayer4").transform.position, FourPlayerPosition.transform.Find("PositionPlayer4").transform.rotation);
+                break;
+        }
+
         SlimeMove slimeMove = PlayerOne.GetComponent<SlimeMove>();
-        slimeMove.enabled = false;
-        Instantiate(PlayerOne, TwoPlayerPosition.transform.Find("PositionPlayer1").transform.position, TwoPlayerPosition.transform.Find("PositionPlayer1").transform.rotation);
-        PlayerTwo = TESTPrefabCactoro;
-        Instantiate(PlayerTwo, TwoPlayerPosition.transform.Find("PositionPlayer2").transform.position, TwoPlayerPosition.transform.Find("PositionPlayer2").transform.rotation);
+        slimeMove.enabled = false; 
     }
 
     void InstantiateEnemies()
