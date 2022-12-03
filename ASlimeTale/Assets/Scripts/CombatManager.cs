@@ -23,6 +23,18 @@ public class CombatManager : MonoBehaviour
     private GameObject PlayerFour;
 
     [SerializeField]
+    private GameObject EnemyOne;
+
+    [SerializeField]
+    private GameObject EnemyTwo;
+
+    [SerializeField]
+    private GameObject EnemyThree;
+
+    [SerializeField]
+    private GameObject EnemyFour;
+
+    [SerializeField]
     private GameObject OnePlayerPosition;
 
     [SerializeField]
@@ -35,12 +47,39 @@ public class CombatManager : MonoBehaviour
     private GameObject FourPlayerPosition;
 
     [SerializeField]
+    private GameObject OneEnemyPosition;
+
+    [SerializeField]
+    private GameObject TwoEnemiesPosition;
+
+    [SerializeField]
+    private GameObject ThreeEnemiesPosition;
+
+    [SerializeField]
+    private GameObject FourEnemiesPosition;
+
+    [SerializeField]
     private GameObject TESTPrefabSlime;
 
     [SerializeField]
     private GameObject TESTPrefabCactoro;
+
+    [SerializeField]
+    private GameObject TESTPrefabEnemy;
     // Start is called before the first frame update
     void Start()
+    {
+        InstantiatePlayers();
+        InstantiateEnemies();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    void InstantiatePlayers()
     {
         PlayerOne = TESTPrefabSlime;
         SlimeMove slimeMove = PlayerOne.GetComponent<SlimeMove>();
@@ -50,9 +89,11 @@ public class CombatManager : MonoBehaviour
         Instantiate(PlayerTwo, TwoPlayerPosition.transform.Find("PositionPlayer2").transform.position, TwoPlayerPosition.transform.Find("PositionPlayer2").transform.rotation);
     }
 
-    // Update is called once per frame
-    void Update()
+    void InstantiateEnemies()
     {
-        
+        EnemyOne = TESTPrefabEnemy;
+        Instantiate(EnemyOne, TwoEnemiesPosition.transform.Find("PositionEnemy1").transform.position, TwoEnemiesPosition.transform.Find("PositionEnemy1").transform.rotation);
+        EnemyTwo = TESTPrefabEnemy;
+        Instantiate(EnemyTwo, TwoEnemiesPosition.transform.Find("PositionEnemy2").transform.position, TwoEnemiesPosition.transform.Find("PositionEnemy2").transform.rotation);
     }
 }
