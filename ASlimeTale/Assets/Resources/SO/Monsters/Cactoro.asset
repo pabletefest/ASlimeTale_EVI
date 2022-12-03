@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Cactoro
   m_EditorClassIdentifier: 
   monsterName: Cactoro
+  monsterPrefab: {fileID: 8965326014069954613, guid: 8e40390112cbdbe4e87f9a8843397425,
+    type: 3}
   baseMaxHP: 90
   baseMaxMP: 70
   baseAttack: 90

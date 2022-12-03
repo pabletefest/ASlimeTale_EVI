@@ -404,6 +404,7 @@ GameObject:
   - component: {fileID: 8584120576216728207}
   - component: {fileID: 8118395095544784226}
   - component: {fileID: 112203662883100210}
+  - component: {fileID: 5216175323679667303}
   m_Layer: 0
   m_Name: Cactoro
   m_TagString: Monster
@@ -460,4 +461,22 @@ CapsuleCollider:
   m_Radius: 1.5
   m_Height: 3
   m_Direction: 1
+  m_Center: {x: 0, y: 1.5, z: 0}
+--- !u!143 &5216175323679667303
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8965326014069954613}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 3
+  m_Radius: 1.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1.5, z: 0}
