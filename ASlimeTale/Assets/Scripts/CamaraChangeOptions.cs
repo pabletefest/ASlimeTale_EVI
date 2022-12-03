@@ -30,10 +30,17 @@ public class CamaraChangeOptions : MonoBehaviour, IPointerEnterHandler, IPointer
         {
             if (time < desiredTime)
             {
-                time += Time.deltaTime;
+                float t = time / desiredTime;
+                t = t * t * (3f - 2f * t);
+                camera.transform.position = Vector3.Lerp(camera.transform.position, desiredPosition.transform.position, t);
+                time += Time.unscaledDeltaTime;
+            }
+            else 
+            {
+                camera.transform.position = desiredPosition.transform.position;
             }
             //camera.transform.position = Vector3.MoveTowards(camera.transform.position, desiredPosition.transform.position, Speed * Time.deltaTime);
-            camera.transform.position = Vector3.Lerp(camera.transform.position, desiredPosition.transform.position, time / desiredTime);
+            //camera.transform.position = Vector3.Lerp(camera.transform.position, desiredPosition.transform.position, time / desiredTime);
             camera.transform.eulerAngles = new Vector3(-1.756f, 169.11f, 2.791f);
         }
     }
