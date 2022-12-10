@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc7d46a0fe5dcb94eb5c197596b4f669, type: 3}
-  m_Name: Flecha de Luz
+  m_Name: Flecha de luz
   m_EditorClassIdentifier: 
   skillName: Flecha de Luz
   power: 40
