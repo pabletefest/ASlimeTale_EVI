@@ -3795,10 +3795,11 @@ MonoBehaviour:
   - {fileID: 518375974}
   - {fileID: 1817587748}
   - {fileID: 793854406}
-  habilidad1: {fileID: 2098375923}
-  habilidad2: {fileID: 2086239540}
-  habilidad3: {fileID: 1667566580}
-  habilidad4: {fileID: 841317487}
+  skillTexts:
+  - {fileID: 2098375923}
+  - {fileID: 2086239540}
+  - {fileID: 1667566580}
+  - {fileID: 841317487}
 --- !u!1001 &1865598391
 PrefabInstance:
   m_ObjectHideFlags: 0
