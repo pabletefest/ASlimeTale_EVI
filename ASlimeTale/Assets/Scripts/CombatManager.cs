@@ -81,6 +81,9 @@ public class CombatManager : MonoBehaviour
 
     void InstantiatePlayers()
     {
+        if (!DataManager.InstanceDB) 
+            return;
+
         players.Clear();
 
         var names = DataManager.InstanceDB.getMonstersTeamNames();
