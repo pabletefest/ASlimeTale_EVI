@@ -2864,7 +2864,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &1452632276
 AudioListener:
   m_ObjectHideFlags: 0
@@ -3072,6 +3072,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   players: []
   enemies: []
+  statusBars: []
+  camera1Player: {fileID: 1452632275}
+  camera2Players: {fileID: 594180113}
+  camera3Players: {fileID: 1714467255}
+  camera4Players: {fileID: 947964855}
   PlayerOne: {fileID: 1545187440}
   PlayerTwo: {fileID: 2107999213}
   PlayerThree: {fileID: 1896559830}
@@ -3088,10 +3093,6 @@ MonoBehaviour:
   TwoEnemiesPosition: {fileID: 1492560456}
   ThreeEnemiesPosition: {fileID: 1323451002}
   FourEnemiesPosition: {fileID: 1810643378}
-  TESTPrefabSlime: {fileID: 4492119070113793648, guid: 4b60fbfcc2efe9c4b920fe090f04bfe3,
-    type: 3}
-  TESTPrefabCactoro: {fileID: 8965326014069954613, guid: 8e40390112cbdbe4e87f9a8843397425,
-    type: 3}
   TESTPrefabEnemy: {fileID: 2021409152918315240, guid: a5ecc09bb38f5604ab72a6625ac24772,
     type: 3}
 --- !u!4 &1539004183
