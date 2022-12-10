@@ -12,8 +12,10 @@ public class MonsterInfo
     public uint currentExp { get; set; }
 
     private Dictionary<string, SkillData> skills;
-
     public Dictionary<string, SkillData> Skills => skills;
+
+    private Dictionary<string, SkillData> learnableSkills;
+    public Dictionary<string, SkillData> LearnableSkills => learnableSkills;
 
     public string getName() => monsterSo.monsterName;
 
@@ -31,9 +33,11 @@ public class MonsterInfo
         // TODO: LOAD FROM CENTRALIZED LOADER
         monsterSo = Resources.Load<MonsterSO>(string.Format($"SO/Monsters/{monsterName}"));
         skills = new Dictionary<string, SkillData>();
+        learnableSkills = new Dictionary<string, SkillData>();
+
         foreach(var skill in monsterSo.skills)
         {
-            skills.Add(skill.skillName, new SkillData(skill));
+            learnableSkills.Add(skill.skillName, new SkillData(skill));
         }
     }
 }

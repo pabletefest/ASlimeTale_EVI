@@ -31,8 +31,6 @@ public class DataManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        PlayerPrefs.DeleteKey(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_SKILLS_KEY, "Slime"));
-
         monstersTeam = new Dictionary<string, MonsterInfo>();
 
         PlayerPrefs.DeleteKey(UtilsHelper.PLAYER_TEAM_KEY);
@@ -55,6 +53,7 @@ public class DataManager : MonoBehaviour
                 foreach (var skillName in skillNames.Split(','))
                     monsterInfo.Skills.Add(skillName, new SkillData(Resources.Load<SkillSO>(String.Format($"SO/Skills/{skillName}"))));
             }
+
             monstersTeam.Add(member, monsterInfo);
         }
     }
