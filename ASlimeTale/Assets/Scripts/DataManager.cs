@@ -30,8 +30,12 @@ public class DataManager : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {   
+    {
+        PlayerPrefs.DeleteKey(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_SKILLS_KEY, "Slime"));
+
         monstersTeam = new Dictionary<string, MonsterInfo>();
+
+        PlayerPrefs.DeleteKey(UtilsHelper.PLAYER_TEAM_KEY);
 
         string playerTeam = PlayerPrefs.GetString(UtilsHelper.PLAYER_TEAM_KEY, "Slime");
 
@@ -44,11 +48,13 @@ public class DataManager : MonoBehaviour
             monsterInfo.currentMP = (uint)PlayerPrefs.GetInt(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_MP_KEY, member), (int)monsterInfo.getMaxMP());
             monsterInfo.currentExp = (uint)PlayerPrefs.GetInt(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_EXP_KEY, member), 0);
 
-            string skillNames = PlayerPrefs.GetString(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_SKILLS_KEY, member), "Ataque");
+            string skillNames = PlayerPrefs.GetString(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_SKILLS_KEY, member), "");
 
-            foreach (var skillName in skillNames.Split(','))
-                monsterInfo.Skills.Add(skillName, new SkillData(Resources.Load<SkillSO>(String.Format($"SO/Skills/{skillName}"))));
-
+            if(skillNames != "")
+            {
+                foreach (var skillName in skillNames.Split(','))
+                    monsterInfo.Skills.Add(skillName, new SkillData(Resources.Load<SkillSO>(String.Format($"SO/Skills/{skillName}"))));
+            }
             monstersTeam.Add(member, monsterInfo);
         }
     }
@@ -74,6 +80,25 @@ public class DataManager : MonoBehaviour
         }
 
         PlayerPrefs.SetString(UtilsHelper.PLAYER_TEAM_KEY, String.Join(",", teamNames));
+    }
+
+    public void AddTeamMember(String member)
+    {
+
+        var monsterInfo = new MonsterInfo(member);
+
+        monsterInfo.level = (uint)PlayerPrefs.GetInt(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_LEVEL_KEY, member), 1);
+        monsterInfo.currentHP = (uint)PlayerPrefs.GetInt(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_HP_KEY, member), (int)monsterInfo.getMaxHP());
+        monsterInfo.currentMP = (uint)PlayerPrefs.GetInt(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_MP_KEY, member), (int)monsterInfo.getMaxMP());
+        monsterInfo.currentExp = (uint)PlayerPrefs.GetInt(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_EXP_KEY, member), 0);
+
+        string skillNames = PlayerPrefs.GetString(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_SKILLS_KEY, member), "Bola de Fuego");
+
+        foreach (var skillName in skillNames.Split(','))
+            monsterInfo.Skills.Add(skillName, new SkillData(Resources.Load<SkillSO>(String.Format($"SO/Skills/{skillName}"))));
+
+        monstersTeam.Add(member, monsterInfo);
+        
     }
 
     void OnDestroy()

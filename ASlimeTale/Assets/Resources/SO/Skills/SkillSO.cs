@@ -40,4 +40,5 @@ public class SkillSO : ScriptableObject
     public Type type;
     public Effect sideEffect;
     public float effectChance;
+    public GameObject vfx;
 }

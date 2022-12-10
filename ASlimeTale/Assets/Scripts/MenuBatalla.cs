@@ -77,6 +77,7 @@ public class MenuBatalla : MonoBehaviour
                     SetSkillText();
                     menuOpen = menuType.SKILL;
                     currentAction = 0;
+                    UpdateSkillSelection(currentAction);
                 }
                 if (currentAction == 4)
                 {
@@ -87,9 +88,12 @@ public class MenuBatalla : MonoBehaviour
         }
         if(menuOpen == menuType.SKILL)
         {
+            Dictionary<string, SkillData> skills = DataManager.InstanceDB.getTeamMemberByName("Slime").Skills;
+            List<string> skillNames = new List<string>(skills.Keys);
+            int skillNumber = skillNames.Count;
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
-                if (currentAction == actionTexts.Count - 1)
+                if (currentAction == skillNumber - 1)
                 {
                     currentAction = 0;
                 }
@@ -97,13 +101,13 @@ public class MenuBatalla : MonoBehaviour
                 {
                     currentAction += 1;
                 }
-                UpdateActionSelection(currentAction);
+                UpdateSkillSelection(currentAction);
             }
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
                 if (currentAction == 0)
                 {
-                    currentAction = actionTexts.Count - 1;
+                    currentAction = skillNumber - 1;
                 }
                 else
                 {
@@ -131,6 +135,7 @@ public class MenuBatalla : MonoBehaviour
 
     public void UpdateSkillSelection(int selectedAction)
     {
+
         for (int i = 0; i < actionTexts.Count; ++i)
         {
             if (i == selectedAction)

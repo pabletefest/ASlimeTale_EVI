@@ -17,7 +17,7 @@ public class RecruitManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Return))
         {
             //TODO Add monster to team
-
+            DataManager.InstanceDB.AddTeamMember("Cactoro");
 
 
             UnityEngine.SceneManagement.SceneManager.LoadScene("LlanuraAfable");

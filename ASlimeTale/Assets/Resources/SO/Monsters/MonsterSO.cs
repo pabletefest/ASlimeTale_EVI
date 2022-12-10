@@ -20,4 +20,6 @@ public class MonsterSO : ScriptableObject
     public uint baseSpeed;
 
     public Sprite barIcon;
+
+    public List<SkillSO> skills;
 }

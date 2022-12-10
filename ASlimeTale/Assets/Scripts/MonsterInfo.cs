@@ -31,5 +31,9 @@ public class MonsterInfo
         // TODO: LOAD FROM CENTRALIZED LOADER
         monsterSo = Resources.Load<MonsterSO>(string.Format($"SO/Monsters/{monsterName}"));
         skills = new Dictionary<string, SkillData>();
+        foreach(var skill in monsterSo.skills)
+        {
+            skills.Add(skill.skillName, new SkillData(skill));
+        }
     }
 }
