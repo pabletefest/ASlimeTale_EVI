@@ -1,13 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RecruitManager : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject recruitableMonster;
+
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
@@ -18,9 +19,16 @@ public class RecruitManager : MonoBehaviour
         {
             //TODO Add monster to team
             DataManager.InstanceDB.AddTeamMember("Cactoro");
+            //SceneManager.LoadScene("LlanuraAfable");
+            AsyncOperation asyncOp = SceneManager.UnloadSceneAsync("Reclutar");
+            asyncOp.completed += (AsyncOperation op) => {
+                
+                SceneManager.SetActiveScene(SceneManager.GetSceneByName("LlanuraAfable"));
+                var sceneGOs = SceneManager.GetActiveScene().GetRootGameObjects();
 
-
-            UnityEngine.SceneManagement.SceneManager.LoadScene("LlanuraAfable");
+                foreach (var go in sceneGOs)
+                    go.SetActive(true);
+            };
         }
     }
 }

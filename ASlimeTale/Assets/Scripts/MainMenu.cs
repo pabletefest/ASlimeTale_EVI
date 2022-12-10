@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
@@ -26,7 +25,7 @@ public class MainMenu : MonoBehaviour
     {
         Cursor.visible = false;
         Time.timeScale = 1;
-        UnityEngine.SceneManagement.SceneManager.LoadScene("LlanuraAfable");
+        SceneManager.LoadScene("LlanuraAfable");
     }
 
     public void ShowCredits()

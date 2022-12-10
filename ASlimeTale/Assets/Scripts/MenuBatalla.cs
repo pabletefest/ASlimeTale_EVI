@@ -81,8 +81,8 @@ public class MenuBatalla : MonoBehaviour
                 }
                 if (currentAction == 4)
                 {
-                    UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");
                     Cursor.visible = true;
+                    UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");
                 }
             }
         }

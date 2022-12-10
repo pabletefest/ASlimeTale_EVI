@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SlimeCollide : MonoBehaviour
 {
@@ -18,19 +17,35 @@ public class SlimeCollide : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        switch (other.tag)
+       switch (other.tag)
         {
             case "Monster":
-                UnityEngine.SceneManagement.SceneManager.LoadScene("Reclutar");
+                other.gameObject.SetActive(false);
+                LoadAdditiveSceneAsync("Reclutar");
                 break;
 
             case "Enemy":
-                UnityEngine.SceneManagement.SceneManager.LoadScene("Combat");
+                other.gameObject.SetActive(false);
+                LoadAdditiveSceneAsync("Combat");
                 break;
 
             default:
                 break;
         }
 
+    }
+
+    private void LoadAdditiveSceneAsync(string sceneName)
+    {
+        AsyncOperation asyncOp = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+        asyncOp.completed += (AsyncOperation op) =>
+        {
+            var sceneGOs = SceneManager.GetActiveScene().GetRootGameObjects();
+
+            foreach (var go in sceneGOs)
+                go.SetActive(false);
+
+            SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
+        };
     }
 }

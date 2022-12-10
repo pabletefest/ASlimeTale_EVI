@@ -7,6 +7,8 @@ public class DataManager : MonoBehaviour
 {
     public static DataManager InstanceDB { get; private set; }
 
+    private static bool alreadyInit = false;
+
     [SerializeField]
     private Dictionary<string, MonsterInfo> monstersTeam;
 
@@ -31,6 +33,9 @@ public class DataManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (alreadyInit)
+            return;
+
         monstersTeam = new Dictionary<string, MonsterInfo>();
 
         PlayerPrefs.DeleteKey(UtilsHelper.PLAYER_TEAM_KEY);
@@ -56,6 +61,8 @@ public class DataManager : MonoBehaviour
 
             monstersTeam.Add(member, monsterInfo);
         }
+
+        alreadyInit= true;
     }
 
     public MonsterInfo getTeamMemberByName(string monsterName) => monstersTeam[monsterName];
@@ -83,6 +90,8 @@ public class DataManager : MonoBehaviour
 
     public void AddTeamMember(String member)
     {
+        if (monstersTeam.ContainsKey(member))
+            return;
 
         var monsterInfo = new MonsterInfo(member);
 
