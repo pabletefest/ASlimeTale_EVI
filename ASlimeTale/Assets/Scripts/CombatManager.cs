@@ -196,9 +196,28 @@ public class CombatManager : MonoBehaviour
 
     void InstantiateEnemies()
     {
-        EnemyOne = TESTPrefabEnemy;
-        Instantiate(EnemyOne, TwoEnemiesPosition.transform.Find("PositionEnemy1").transform.position, TwoEnemiesPosition.transform.Find("PositionEnemy1").transform.rotation);
-        EnemyTwo = TESTPrefabEnemy;
-        Instantiate(EnemyTwo, TwoEnemiesPosition.transform.Find("PositionEnemy2").transform.position, TwoEnemiesPosition.transform.Find("PositionEnemy2").transform.rotation);
+        int enemyNumber = Random.Range(1, players.Count + 1);
+        EnemySO enemy = Resources.Load<EnemySO>(string.Format($"SO/Enemies/Knight"));
+        switch (enemyNumber)
+        {
+            case 1:
+                EnemyOne = Instantiate(enemy.enemyPrefab, OneEnemyPosition.transform.Find("PositionEnemy1").transform.position, OneEnemyPosition.transform.Find("PositionEnemy1").transform.rotation);
+                break;
+            case 2:
+                EnemyOne = Instantiate(enemy.enemyPrefab, TwoEnemiesPosition.transform.Find("PositionEnemy1").transform.position, TwoEnemiesPosition.transform.Find("PositionEnemy1").transform.rotation);
+                EnemyTwo = Instantiate(enemy.enemyPrefab, TwoEnemiesPosition.transform.Find("PositionEnemy2").transform.position, TwoEnemiesPosition.transform.Find("PositionEnemy2").transform.rotation);
+                break;
+            case 3:
+                EnemyOne = Instantiate(enemy.enemyPrefab, ThreeEnemiesPosition.transform.Find("PositionEnemy1").transform.position, ThreeEnemiesPosition.transform.Find("PositionEnemy1").transform.rotation);
+                EnemyTwo = Instantiate(enemy.enemyPrefab, ThreeEnemiesPosition.transform.Find("PositionEnemy2").transform.position, ThreeEnemiesPosition.transform.Find("PositionEnemy2").transform.rotation);
+                EnemyThree = Instantiate(enemy.enemyPrefab, ThreeEnemiesPosition.transform.Find("PositionEnemy3").transform.position, ThreeEnemiesPosition.transform.Find("PositionEnemy3").transform.rotation);
+                break;
+            case 4:
+                EnemyOne = Instantiate(enemy.enemyPrefab, FourEnemiesPosition.transform.Find("PositionEnemy1").transform.position, FourEnemiesPosition.transform.Find("PositionEnemy1").transform.rotation);
+                EnemyTwo = Instantiate(enemy.enemyPrefab, FourEnemiesPosition.transform.Find("PositionEnemy2").transform.position, FourEnemiesPosition.transform.Find("PositionEnemy2").transform.rotation);
+                EnemyThree = Instantiate(enemy.enemyPrefab, FourEnemiesPosition.transform.Find("PositionEnemy3").transform.position, FourEnemiesPosition.transform.Find("PositionEnemy3").transform.rotation);
+                EnemyFour = Instantiate(enemy.enemyPrefab, FourEnemiesPosition.transform.Find("PositionEnemy4").transform.position, FourEnemiesPosition.transform.Find("PositionEnemy4").transform.rotation);
+                break;
+        }
     }
 }

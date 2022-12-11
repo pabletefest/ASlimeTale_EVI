@@ -77,7 +77,7 @@ public class MenuBatalla : MonoBehaviour
                     SetSkillText();
                     menuOpen = menuType.SKILL;
                     currentAction = 0;
-                    UpdateSkillSelection(currentAction);
+                    UpdateSkillSelection(currentAction, true);
                 }
                 if (currentAction == 4)
                 {
@@ -101,7 +101,8 @@ public class MenuBatalla : MonoBehaviour
                 {
                     currentAction += 1;
                 }
-                UpdateSkillSelection(currentAction);
+                if(skillNumber == 0) UpdateSkillSelection(currentAction, true);
+                else UpdateSkillSelection(currentAction, false);
             }
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
@@ -113,7 +114,8 @@ public class MenuBatalla : MonoBehaviour
                 {
                     currentAction -= 1;
                 }
-                UpdateSkillSelection(currentAction);
+                if (skillNumber == 0) UpdateSkillSelection(currentAction, true);
+                else UpdateSkillSelection(currentAction, false);
             }
         }
         
@@ -133,20 +135,26 @@ public class MenuBatalla : MonoBehaviour
         }
     }
 
-    public void UpdateSkillSelection(int selectedAction)
+    public void UpdateSkillSelection(int selectedAction, bool noSkills)
     {
-
-        for (int i = 0; i < actionTexts.Count; ++i)
+        if (noSkills)
         {
-            if (i == selectedAction)
-            {
-                skillTexts[i].color = highlightedColor;
-            }
-            else
-            {
-                skillTexts[i].color = Color.black;
-            }
+            skillTexts[0].color = highlightedColor;
         }
+        else
+        {
+            for (int i = 0; i < skillTexts.Count; ++i)
+            {
+                if (i == selectedAction)
+                {
+                    skillTexts[i].color = highlightedColor;
+                }
+                else
+                {
+                    skillTexts[i].color = Color.black;
+                }
+            }
+        }    
     }
 
     public void SetSkillText()

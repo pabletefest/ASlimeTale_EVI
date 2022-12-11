@@ -5,17 +5,18 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Enemy", menuName = "ScriptableObjects/Enemy")]
 public class EnemySO : ScriptableObject
 {
-    [SerializeField] private string enemyName;
+    public string enemyName;
+    public GameObject enemyPrefab;
 
-    [SerializeField] private uint baseMaxHP;
-    [SerializeField] private uint baseMaxMP;
+    public uint baseMaxHP;
+    public uint baseMaxMP;
 
 
-    [SerializeField] private uint baseAttack;
-    [SerializeField] private uint baseDefense;
-    [SerializeField] private uint baseMagic;
-    [SerializeField] private uint baseResistance;
-    [SerializeField] private uint baseSpeed;
+    public uint baseAttack;
+    public uint baseDefense;
+    public uint baseMagic;
+    public uint baseResistance;
+    public uint baseSpeed;
 
     public enum Weakness
     {
@@ -31,5 +32,5 @@ public class EnemySO : ScriptableObject
         PLANT
     }
 
-    [SerializeField] private Weakness weakness;
+    public Weakness weakness;
 }
