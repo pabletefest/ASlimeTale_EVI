@@ -6,9 +6,17 @@ public class RecruitManager : MonoBehaviour
     [SerializeField]
     private GameObject recruitableMonster;
 
+    [SerializeField]
+    private GameObject SpawnPoint;
+
+    private string monsterName;
+
     // Start is called before the first frame update
     void Start()
     {
+        monsterName = PlayerPrefs.GetString("RecruitableMonster");
+
+        InstantiateMonster();
     }
 
     // Update is called once per frame
@@ -18,7 +26,7 @@ public class RecruitManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Return))
         {
             //TODO Add monster to team
-            DataManager.InstanceDB.AddTeamMember("Cactoro");
+            DataManager.InstanceDB.AddTeamMember(monsterName);
             //SceneManager.LoadScene("LlanuraAfable");
             AsyncOperation asyncOp = SceneManager.UnloadSceneAsync("Reclutar");
             asyncOp.completed += (AsyncOperation op) => {
@@ -30,5 +38,10 @@ public class RecruitManager : MonoBehaviour
                     go.SetActive(true);
             };
         }
+    }
+    void InstantiateMonster()
+    {
+        var monster = Resources.Load<MonsterSO>(string.Format($"SO/Monsters/{monsterName}"));
+        Instantiate(monster.monsterPrefab, SpawnPoint.transform.position, SpawnPoint.transform.rotation);
     }
 }

@@ -150,7 +150,7 @@ public class CombatManager : MonoBehaviour
                     player1Bar.transform.Find("Mask/Icon").gameObject.GetComponent<Image>().sprite = players[0].barIcon;
                     player1Bar.SetActive(true);
 
-                    PlayerTwo = Instantiate(players[1].monsterPrefab, TwoPlayerPosition.transform.Find("PositionPlayer2").transform.position, TwoPlayerPosition.transform.Find("PositionPlayer2").transform.rotation);
+                    PlayerTwo = Instantiate(players[1].monsterPrefab, ThreePlayerPosition.transform.Find("PositionPlayer2").transform.position, ThreePlayerPosition.transform.Find("PositionPlayer2").transform.rotation);
                     var player2Bar = statusBars[(int)BarsPosition.MIDDLE_TOP];
                     player2Bar.transform.Find("Mask/Icon").gameObject.GetComponent<Image>().sprite = players[1].barIcon;
                     player2Bar.SetActive(true);
@@ -165,17 +165,17 @@ public class CombatManager : MonoBehaviour
                 break;
             case 4:
                 {
-                    PlayerOne = Instantiate(players[0].monsterPrefab, ThreePlayerPosition.transform.Find("PositionPlayer1").transform.position, ThreePlayerPosition.transform.Find("PositionPlayer1").transform.rotation);
+                    PlayerOne = Instantiate(players[0].monsterPrefab, FourPlayerPosition.transform.Find("PositionPlayer1").transform.position, FourPlayerPosition.transform.Find("PositionPlayer1").transform.rotation);
                     var player1Bar = statusBars[(int)BarsPosition.TOP];
                     player1Bar.transform.Find("Mask/Icon").gameObject.GetComponent<Image>().sprite = players[0].barIcon;
                     player1Bar.SetActive(true);
 
-                    PlayerTwo = Instantiate(players[1].monsterPrefab, TwoPlayerPosition.transform.Find("PositionPlayer2").transform.position, TwoPlayerPosition.transform.Find("PositionPlayer2").transform.rotation);
+                    PlayerTwo = Instantiate(players[1].monsterPrefab, FourPlayerPosition.transform.Find("PositionPlayer2").transform.position, FourPlayerPosition.transform.Find("PositionPlayer2").transform.rotation);
                     var player2Bar = statusBars[(int)BarsPosition.MIDDLE_TOP];
                     player2Bar.transform.Find("Mask/Icon").gameObject.GetComponent<Image>().sprite = players[1].barIcon;
                     player2Bar.SetActive(true);
 
-                    PlayerThree = Instantiate(players[2].monsterPrefab, ThreePlayerPosition.transform.Find("PositionPlayer3").transform.position, ThreePlayerPosition.transform.Find("PositionPlayer3").transform.rotation);
+                    PlayerThree = Instantiate(players[2].monsterPrefab, FourPlayerPosition.transform.Find("PositionPlayer3").transform.position, FourPlayerPosition.transform.Find("PositionPlayer3").transform.rotation);
                     var player3bar = statusBars[(int)BarsPosition.MIDDLE_BOT];
                     player3bar.transform.Find("Mask/Icon").gameObject.GetComponent<Image>().sprite = players[2].barIcon;
                     player3bar.SetActive(true);

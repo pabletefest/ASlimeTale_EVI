@@ -20,6 +20,7 @@ public class SlimeCollide : MonoBehaviour
        switch (other.tag)
         {
             case "Monster":
+                PlayerPrefs.SetString("RecruitableMonster", other.name);
                 other.gameObject.SetActive(false);
                 LoadAdditiveSceneAsync("Reclutar");
                 break;
