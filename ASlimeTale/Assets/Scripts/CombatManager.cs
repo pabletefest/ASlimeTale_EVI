@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum BattleState { START, PLAYERTURN, ENEMYTURN, WON, LOST }
+
 public class CombatManager : MonoBehaviour
 {
+
     [SerializeField]
     private List<MonsterSO> players;
     
@@ -82,17 +85,18 @@ public class CombatManager : MonoBehaviour
     [SerializeField]
     private GameObject TESTPrefabEnemy;
 
+    List<GameObject> allCharacters = new List<GameObject>();
+
+    public BattleState state;
+
+    Dictionary<GameObject, MonsterSO> playerStats;
+    Dictionary<GameObject, EnemySO> enemyStats;
+
     // Start is called before the first frame update
     void Start()
     {
-        statusBars = new List<GameObject>();
-        statusBars.Insert((int)BarsPosition.TOP, GameObject.Find("Canvas").transform.Find("BarraMonstruoTop").gameObject);
-        statusBars.Insert((int)BarsPosition.MIDDLE_TOP, GameObject.Find("Canvas").transform.Find("BarraMonstruoMiddleTop").gameObject);
-        statusBars.Insert((int)BarsPosition.MIDDLE_BOT, GameObject.Find("Canvas").transform.Find("BarraMonstruoMiddleBot").gameObject);
-        statusBars.Insert((int)BarsPosition.BOT, GameObject.Find("Canvas").transform.Find("BarraMonstruoBot").gameObject);
-
-        InstantiatePlayers();
-        InstantiateEnemies();
+        state = BattleState.START;
+        StartCoroutine(SetupBattle());
     }
 
     // Update is called once per frame
@@ -124,7 +128,8 @@ public class CombatManager : MonoBehaviour
                     var player1Bar = statusBars[(int)BarsPosition.MIDDLE_TOP];
                     player1Bar.transform.Find("Mask/Icon").gameObject.GetComponent<Image>().sprite = players[0].barIcon;
                     player1Bar.SetActive(true);
-
+                    allCharacters.Add(PlayerOne);
+                    playerStats.Add(PlayerOne, players[0]);
                     camera1Player.SetActive(true);
                 }
                 break;
@@ -134,11 +139,15 @@ public class CombatManager : MonoBehaviour
                     var player1Bar = statusBars[(int)BarsPosition.MIDDLE_TOP];
                     player1Bar.transform.Find("Mask/Icon").gameObject.GetComponent<Image>().sprite = players[0].barIcon;
                     player1Bar.SetActive(true);
+                    allCharacters.Add(PlayerOne);
+                    playerStats.Add(PlayerOne, players[0]);
 
                     PlayerTwo = Instantiate(players[1].monsterPrefab, TwoPlayerPosition.transform.Find("PositionPlayer2").transform.position, TwoPlayerPosition.transform.Find("PositionPlayer2").transform.rotation);
                     var player2Bar = statusBars[(int)BarsPosition.MIDDLE_BOT];
                     player2Bar.transform.Find("Mask/Icon").gameObject.GetComponent<Image>().sprite = players[1].barIcon;
                     player2Bar.SetActive(true);
+                    allCharacters.Add(PlayerTwo);
+                    playerStats.Add(PlayerTwo, players[1]);
 
                     camera2Players.SetActive(true);
                 }
@@ -149,16 +158,22 @@ public class CombatManager : MonoBehaviour
                     var player1Bar = statusBars[(int)BarsPosition.TOP];
                     player1Bar.transform.Find("Mask/Icon").gameObject.GetComponent<Image>().sprite = players[0].barIcon;
                     player1Bar.SetActive(true);
+                    allCharacters.Add(PlayerOne);
+                    playerStats.Add(PlayerOne, players[0]);
 
                     PlayerTwo = Instantiate(players[1].monsterPrefab, ThreePlayerPosition.transform.Find("PositionPlayer2").transform.position, ThreePlayerPosition.transform.Find("PositionPlayer2").transform.rotation);
                     var player2Bar = statusBars[(int)BarsPosition.MIDDLE_TOP];
                     player2Bar.transform.Find("Mask/Icon").gameObject.GetComponent<Image>().sprite = players[1].barIcon;
                     player2Bar.SetActive(true);
+                    allCharacters.Add(PlayerTwo);
+                    playerStats.Add(PlayerTwo, players[1]);
 
                     PlayerThree = Instantiate(players[2].monsterPrefab, ThreePlayerPosition.transform.Find("PositionPlayer3").transform.position, ThreePlayerPosition.transform.Find("PositionPlayer3").transform.rotation);
                     var player3bar = statusBars[(int)BarsPosition.MIDDLE_BOT];
                     player3bar.transform.Find("Mask/Icon").gameObject.GetComponent<Image>().sprite = players[2].barIcon;
                     player3bar.SetActive(true);
+                    allCharacters.Add(PlayerThree);
+                    playerStats.Add(PlayerThree, players[2]);
 
                     camera3Players.SetActive(true);
                 }
@@ -169,21 +184,29 @@ public class CombatManager : MonoBehaviour
                     var player1Bar = statusBars[(int)BarsPosition.TOP];
                     player1Bar.transform.Find("Mask/Icon").gameObject.GetComponent<Image>().sprite = players[0].barIcon;
                     player1Bar.SetActive(true);
+                    allCharacters.Add(PlayerOne);
+                    playerStats.Add(PlayerOne, players[0]);
 
                     PlayerTwo = Instantiate(players[1].monsterPrefab, FourPlayerPosition.transform.Find("PositionPlayer2").transform.position, FourPlayerPosition.transform.Find("PositionPlayer2").transform.rotation);
                     var player2Bar = statusBars[(int)BarsPosition.MIDDLE_TOP];
                     player2Bar.transform.Find("Mask/Icon").gameObject.GetComponent<Image>().sprite = players[1].barIcon;
                     player2Bar.SetActive(true);
+                    allCharacters.Add(PlayerTwo);
+                    playerStats.Add(PlayerTwo, players[1]);
 
                     PlayerThree = Instantiate(players[2].monsterPrefab, FourPlayerPosition.transform.Find("PositionPlayer3").transform.position, FourPlayerPosition.transform.Find("PositionPlayer3").transform.rotation);
                     var player3bar = statusBars[(int)BarsPosition.MIDDLE_BOT];
                     player3bar.transform.Find("Mask/Icon").gameObject.GetComponent<Image>().sprite = players[2].barIcon;
                     player3bar.SetActive(true);
+                    allCharacters.Add(PlayerThree);
+                    playerStats.Add(PlayerThree, players[2]);
 
                     PlayerFour = Instantiate(players[3].monsterPrefab, FourPlayerPosition.transform.Find("PositionPlayer4").transform.position, FourPlayerPosition.transform.Find("PositionPlayer4").transform.rotation);
                     var player4Bar = statusBars[(int)BarsPosition.BOT];
                     player4Bar.transform.Find("Mask/Icon").gameObject.GetComponent<Image>().sprite = players[3].barIcon;
                     player4Bar.SetActive(true);
+                    allCharacters.Add(PlayerFour);
+                    playerStats.Add(PlayerFour, players[3]);
 
                     camera4Players.SetActive(true);
                 }
@@ -205,22 +228,58 @@ public class CombatManager : MonoBehaviour
                 Debug.Log(OneEnemyPosition.transform.Find("PositionEnemy1").transform.position);
                 Debug.Log(OneEnemyPosition.transform.Find("PositionEnemy1").transform.rotation);
                 EnemyOne = Instantiate(enemy.enemyPrefab, OneEnemyPosition.transform.Find("PositionEnemy1").transform.position, OneEnemyPosition.transform.Find("PositionEnemy1").transform.rotation);
+                enemyStats.Add(EnemyOne, enemy);
+                
+                allCharacters.Add(EnemyOne);
                 break;
             case 2:
                 EnemyOne = Instantiate(enemy.enemyPrefab, TwoEnemiesPosition.transform.Find("PositionEnemy1").transform.position, TwoEnemiesPosition.transform.Find("PositionEnemy1").transform.rotation);
                 EnemyTwo = Instantiate(enemy.enemyPrefab, TwoEnemiesPosition.transform.Find("PositionEnemy2").transform.position, TwoEnemiesPosition.transform.Find("PositionEnemy2").transform.rotation);
+                allCharacters.Add(EnemyOne);
+                allCharacters.Add(EnemyTwo);
+                enemyStats.Add(EnemyOne, enemy);
+                enemyStats.Add(EnemyTwo, enemy);
                 break;
             case 3:
                 EnemyOne = Instantiate(enemy.enemyPrefab, ThreeEnemiesPosition.transform.Find("PositionEnemy1").transform.position, ThreeEnemiesPosition.transform.Find("PositionEnemy1").transform.rotation);
                 EnemyTwo = Instantiate(enemy.enemyPrefab, ThreeEnemiesPosition.transform.Find("PositionEnemy2").transform.position, ThreeEnemiesPosition.transform.Find("PositionEnemy2").transform.rotation);
                 EnemyThree = Instantiate(enemy.enemyPrefab, ThreeEnemiesPosition.transform.Find("PositionEnemy3").transform.position, ThreeEnemiesPosition.transform.Find("PositionEnemy3").transform.rotation);
+                allCharacters.Add(EnemyOne);
+                allCharacters.Add(EnemyTwo);
+                allCharacters.Add(EnemyThree);
+                enemyStats.Add(EnemyOne, enemy);
+                enemyStats.Add(EnemyTwo, enemy);
+                enemyStats.Add(EnemyThree, enemy);
                 break;
             case 4:
                 EnemyOne = Instantiate(enemy.enemyPrefab, FourEnemiesPosition.transform.Find("PositionEnemy1").transform.position, FourEnemiesPosition.transform.Find("PositionEnemy1").transform.rotation);
                 EnemyTwo = Instantiate(enemy.enemyPrefab, FourEnemiesPosition.transform.Find("PositionEnemy2").transform.position, FourEnemiesPosition.transform.Find("PositionEnemy2").transform.rotation);
                 EnemyThree = Instantiate(enemy.enemyPrefab, FourEnemiesPosition.transform.Find("PositionEnemy3").transform.position, FourEnemiesPosition.transform.Find("PositionEnemy3").transform.rotation);
                 EnemyFour = Instantiate(enemy.enemyPrefab, FourEnemiesPosition.transform.Find("PositionEnemy4").transform.position, FourEnemiesPosition.transform.Find("PositionEnemy4").transform.rotation);
+                allCharacters.Add(EnemyOne);
+                allCharacters.Add(EnemyTwo);
+                allCharacters.Add(EnemyThree);
+                allCharacters.Add(EnemyFour);
+                enemyStats.Add(EnemyOne, enemy);
+                enemyStats.Add(EnemyTwo, enemy);
+                enemyStats.Add(EnemyThree, enemy);
+                enemyStats.Add(EnemyFour, enemy);
                 break;
         }
+    }
+
+    IEnumerator SetupBattle()
+    {
+        statusBars = new List<GameObject>();
+        statusBars.Insert((int)BarsPosition.TOP, GameObject.Find("Canvas").transform.Find("BarraMonstruoTop").gameObject);
+        statusBars.Insert((int)BarsPosition.MIDDLE_TOP, GameObject.Find("Canvas").transform.Find("BarraMonstruoMiddleTop").gameObject);
+        statusBars.Insert((int)BarsPosition.MIDDLE_BOT, GameObject.Find("Canvas").transform.Find("BarraMonstruoMiddleBot").gameObject);
+        statusBars.Insert((int)BarsPosition.BOT, GameObject.Find("Canvas").transform.Find("BarraMonstruoBot").gameObject);
+
+        InstantiatePlayers();
+        InstantiateEnemies();
+
+        yield return new WaitForSeconds(1f);
+
     }
 }
