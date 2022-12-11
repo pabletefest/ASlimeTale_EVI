@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9bc26443ca1b41e4ebee7fb5e3555071, type: 3}
-  m_Name: Cactoro
+  m_Name: Mudfish
   m_EditorClassIdentifier: 
-  monsterName: Cactoro
-  monsterPrefab: {fileID: 8965326014069954613, guid: 8e40390112cbdbe4e87f9a8843397425,
+  monsterName: Mudfish
+  monsterPrefab: {fileID: 4244205603578556305, guid: 3cce846aa62e63349b435559af6b43bf,
     type: 3}
-  baseMaxHP: 100
-  baseMaxMP: 70
-  baseAttack: 50
-  baseDefense: 90
+  baseMaxHP: 80
+  baseMaxMP: 50
+  baseAttack: 100
+  baseDefense: 70
   baseMagic: 50
-  baseResistance: 80
-  baseSpeed: 60
-  barIcon: {fileID: 21300000, guid: 7172543f3e6c7b3459a7ed385093d555, type: 3}
+  baseResistance: 50
+  baseSpeed: 100
+  barIcon: {fileID: 21300000, guid: 2f322fd874ef18a4b87888b4f6b7c8a0, type: 3}
   skills:
-  - {fileID: 11400000, guid: dac6a34be8b2e584bb6d1ee83517f702, type: 2}
+  - {fileID: 11400000, guid: 8912ad6d64c65e54f8d5639789de0890, type: 2}

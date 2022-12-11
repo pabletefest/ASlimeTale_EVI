@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9bc26443ca1b41e4ebee7fb5e3555071, type: 3}
-  m_Name: Cactoro
+  m_Name: Abelago
   m_EditorClassIdentifier: 
-  monsterName: Cactoro
-  monsterPrefab: {fileID: 8965326014069954613, guid: 8e40390112cbdbe4e87f9a8843397425,
+  monsterName: Abelago
+  monsterPrefab: {fileID: 4993139655433834477, guid: 9829953cb458f7d48b50cea490529fc0,
     type: 3}
-  baseMaxHP: 100
-  baseMaxMP: 70
-  baseAttack: 50
-  baseDefense: 90
-  baseMagic: 50
+  baseMaxHP: 60
+  baseMaxMP: 100
+  baseAttack: 40
+  baseDefense: 70
+  baseMagic: 90
   baseResistance: 80
   baseSpeed: 60
-  barIcon: {fileID: 21300000, guid: 7172543f3e6c7b3459a7ed385093d555, type: 3}
+  barIcon: {fileID: 21300000, guid: 5438d909213ff40489bfd0b0569d7fd8, type: 3}
   skills:
-  - {fileID: 11400000, guid: dac6a34be8b2e584bb6d1ee83517f702, type: 2}
+  - {fileID: 11400000, guid: 3d3afb0de708f334bba52de5097981cf, type: 2}
