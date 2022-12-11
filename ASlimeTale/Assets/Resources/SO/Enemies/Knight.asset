@@ -20,4 +20,4 @@ MonoBehaviour:
   baseMagic: 10
   baseResistance: 10
   baseSpeed: 70
-  weakness: 4
+  weakness: 1
