@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Knight
   m_EditorClassIdentifier: 
   enemyName: Knight
+  enemyPrefab: {fileID: 2021409152918315240, guid: a5ecc09bb38f5604ab72a6625ac24772,
+    type: 3}
   baseMaxHP: 200
   baseMaxMP: 20
   baseAttack: 30

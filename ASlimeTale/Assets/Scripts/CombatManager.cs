@@ -201,6 +201,9 @@ public class CombatManager : MonoBehaviour
         switch (enemyNumber)
         {
             case 1:
+                Debug.Log(enemy.enemyName);
+                Debug.Log(OneEnemyPosition.transform.Find("PositionEnemy1").transform.position);
+                Debug.Log(OneEnemyPosition.transform.Find("PositionEnemy1").transform.rotation);
                 EnemyOne = Instantiate(enemy.enemyPrefab, OneEnemyPosition.transform.Find("PositionEnemy1").transform.position, OneEnemyPosition.transform.Find("PositionEnemy1").transform.rotation);
                 break;
             case 2:
