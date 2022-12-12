@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FixCameraRotation : MonoBehaviour
+public class FixRotation : MonoBehaviour
 {
     Quaternion rotation;
     void Awake()
