@@ -61,12 +61,12 @@ public class RecruitManager : MonoBehaviour
 
             case "Abelago":
                 dialogueText.text = "Bzzz ¿Unirme a ti? ¡Perfecto! Necesito un compañero para irme de aventuras. Bzzz";
-                recruitText.text = "Presiona Enter para decir Bzzz";
+                recruitText.text = "Presiona Enter para decir 'Bzzz'.";
                 break;
 
             case "Mudfish":
                 dialogueText.text = "Puedo ir contigo pero vas a tener que regarme a menudo.";
-                recruitText.text = "Presiona Enter para disparle con la manguera";
+                recruitText.text = "Presiona Enter para dispararle con la manguera.";
                 break;
         }
 	}
