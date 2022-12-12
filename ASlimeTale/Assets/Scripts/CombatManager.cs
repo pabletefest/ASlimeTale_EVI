@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum BattleState { START, PLAYERTURN, ENEMYTURN, WON, LOST }
+public enum BattleState { START, CALCULATING, PLAYERTURN, ENEMYTURN, PLAYERANIM, ENEMYANIM, FULLROUND, WON, LOST }
 
 public class CombatManager : MonoBehaviour
 {
@@ -85,6 +85,9 @@ public class CombatManager : MonoBehaviour
     [SerializeField]
     private GameObject TESTPrefabEnemy;
 
+    [SerializeField]
+    private MenuBatalla menuController;
+
     List<GameObject> allCharacters = new List<GameObject>();
 
     public BattleState state;
@@ -113,6 +116,7 @@ public class CombatManager : MonoBehaviour
         players.Clear();
 
         var names = DataManager.InstanceDB.getMonstersTeamNames();
+        playerStats = new Dictionary<GameObject, MonsterSO>();
 
         foreach (var name in names)
         {
@@ -221,6 +225,7 @@ public class CombatManager : MonoBehaviour
     {
         int enemyNumber = Random.Range(1, players.Count + 1);
         EnemySO enemy = Resources.Load<EnemySO>(string.Format($"SO/Enemies/Knight"));
+        enemyStats = new Dictionary<GameObject, EnemySO>();
         switch (enemyNumber)
         {
             case 1:
@@ -280,6 +285,118 @@ public class CombatManager : MonoBehaviour
         InstantiateEnemies();
 
         yield return new WaitForSeconds(1f);
+
+        state = BattleState.CALCULATING;
+        CalculateTurn();
+
+    }
+
+    void CalculateTurn()
+    {
+
+        float maxSpeed = 0.0f;
+        float currentSpeed = 0.0f;
+        GameObject fastestCharacter = null;
+        foreach(GameObject character in allCharacters)
+        {
+            if (playerStats.ContainsKey(character))
+            {
+                currentSpeed = (float)playerStats[character].baseSpeed * Random.Range(0.9f, 1.11f);
+            } else if (enemyStats.ContainsKey(character))
+            {
+                currentSpeed = (float)enemyStats[character].baseSpeed * Random.Range(0.9f, 1.11f);
+            }
+            if (currentSpeed > maxSpeed)
+            {
+                maxSpeed = currentSpeed;
+                fastestCharacter = character;
+            }
+        }
+        allCharacters.Remove(fastestCharacter);
+
+        if (enemyStats.ContainsKey(fastestCharacter))
+        {
+            state = BattleState.ENEMYTURN;
+            EnemyTurn();
+
+        }else if (playerStats.ContainsKey(fastestCharacter))
+        {
+            state = BattleState.PLAYERTURN;
+            PlayerTurn();
+        } else
+        {
+            state = BattleState.FULLROUND;
+            FullRound();
+        }
+    }
+
+    void FullRound()
+    {
+        switch (players.Count)
+        {
+            case 1:
+                allCharacters.Add(PlayerOne);
+                break;
+            case 2:
+                allCharacters.Add(PlayerOne);
+                allCharacters.Add(PlayerTwo);
+                break;
+            case 3:
+                allCharacters.Add(PlayerOne);
+                allCharacters.Add(PlayerTwo);
+                allCharacters.Add(PlayerThree);
+                break;
+            case 4:
+                allCharacters.Add(PlayerOne);
+                allCharacters.Add(PlayerTwo);
+                allCharacters.Add(PlayerThree);
+                allCharacters.Add(PlayerFour);
+                break;
+        }
+
+        switch (enemies.Count)
+        {
+            case 1:
+                allCharacters.Add(EnemyOne);
+                break;
+            case 2:
+                allCharacters.Add(EnemyOne);
+                allCharacters.Add(EnemyTwo);
+                break;
+            case 3:
+                allCharacters.Add(EnemyOne);
+                allCharacters.Add(EnemyTwo);
+                allCharacters.Add(EnemyThree);
+                break;
+            case 4:
+                allCharacters.Add(EnemyOne);
+                allCharacters.Add(EnemyTwo);
+                allCharacters.Add(EnemyThree);
+                allCharacters.Add(EnemyFour);
+                break;
+        }
+
+        state = BattleState.CALCULATING;
+        CalculateTurn();
+    }
+
+    void PlayerTurn()
+    {
+        string selectedAction = "";
+        while(selectedAction.Equals(""))
+        {
+            selectedAction = menuController.isPlayerTurn();
+        }
+        StartCoroutine(PlayerAnimation(selectedAction));
+    }
+
+    IEnumerator PlayerAnimation(string action)
+    {
+        yield return new WaitForSeconds(5f);
+    }
+
+    void EnemyTurn()
+    {
 
     }
 }

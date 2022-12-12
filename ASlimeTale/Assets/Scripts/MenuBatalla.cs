@@ -43,7 +43,14 @@ public class MenuBatalla : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(menuOpen == menuType.ACTION) {
+        
+    }
+
+    public string isPlayerTurn()
+    {
+        string selectedAction = "";
+        if (menuOpen == menuType.ACTION)
+        {
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
                 if (currentAction == actionTexts.Count - 1)
@@ -86,7 +93,7 @@ public class MenuBatalla : MonoBehaviour
                 }
             }
         }
-        if(menuOpen == menuType.SKILL)
+        if (menuOpen == menuType.SKILL)
         {
             Dictionary<string, SkillData> skills = DataManager.InstanceDB.getTeamMemberByName("Slime").Skills;
             List<string> skillNames = new List<string>(skills.Keys);
@@ -101,7 +108,7 @@ public class MenuBatalla : MonoBehaviour
                 {
                     currentAction += 1;
                 }
-                if(skillNumber == 0) UpdateSkillSelection(currentAction, true);
+                if (skillNumber == 0) UpdateSkillSelection(currentAction, true);
                 else UpdateSkillSelection(currentAction, false);
             }
             if (Input.GetKeyDown(KeyCode.UpArrow))
@@ -118,7 +125,7 @@ public class MenuBatalla : MonoBehaviour
                 else UpdateSkillSelection(currentAction, false);
             }
         }
-        
+        return selectedAction;
     }
 
     public void UpdateActionSelection(int selectedAction)
