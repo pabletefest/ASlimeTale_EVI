@@ -3095,6 +3095,8 @@ MonoBehaviour:
   FourEnemiesPosition: {fileID: 1810643378}
   TESTPrefabEnemy: {fileID: 2021409152918315240, guid: a5ecc09bb38f5604ab72a6625ac24772,
     type: 3}
+  menuController: {fileID: 1864231212}
+  state: 0
 --- !u!4 &1539004183
 Transform:
   m_ObjectHideFlags: 0
