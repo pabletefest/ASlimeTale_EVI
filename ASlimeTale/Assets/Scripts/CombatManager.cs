@@ -89,6 +89,9 @@ public class CombatManager : MonoBehaviour
     [SerializeField]
     private MenuBatalla menuController;
 
+    [SerializeField]
+    private GameObject turnMarker;
+
     List<GameObject> allCharacters = new List<GameObject>();
 
     public BattleState state;
@@ -398,6 +401,8 @@ public class CombatManager : MonoBehaviour
     {
         menuController.SetCurrentPlayerName(playerStats[unitCurrentTurn].monsterName);
         menuController.EnableMenu(true);
+        turnMarker.transform.position = unitCurrentTurn.transform.position;
+        turnMarker.SetActive(true);
 
         //string selectedAction = "";
         //while(selectedAction.Equals(""))
@@ -446,6 +451,8 @@ public class CombatManager : MonoBehaviour
 
     void EnemyTurn()
     {
+        turnMarker.transform.position = unitCurrentTurn.transform.position;
+        turnMarker.SetActive(true);
         //menuController.EnableMenu(false);
     }
 }
