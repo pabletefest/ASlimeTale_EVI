@@ -12,6 +12,9 @@ public class RecruitManager : MonoBehaviour
     [SerializeField]
     private Text dialogueText;
 
+    [SerializeField]
+    private Text recruitText;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -53,14 +56,17 @@ public class RecruitManager : MonoBehaviour
 		{
             case "Cactoro":
                 dialogueText.text = "Ándale limo, dame tacos al pastor y me uniré a ti.";
+                recruitText.text = "Presiona Enter para darle unos tacos.";
                 break;
 
             case "Abelago":
-                dialogueText.text = "¿Unirme a ti? ¡Perfecto! Necesito un compañero para irme de aventuras. Bzzz";
+                dialogueText.text = "Bzzz ¿Unirme a ti? ¡Perfecto! Necesito un compañero para irme de aventuras. Bzzz";
+                recruitText.text = "Presiona Enter para decir Bzzz";
                 break;
 
             case "Mudfish":
                 dialogueText.text = "Puedo ir contigo pero vas a tener que regarme a menudo.";
+                recruitText.text = "Presiona Enter para disparle con la manguera";
                 break;
         }
 	}
