@@ -1,6 +1,8 @@
-﻿using static SkillSO;
+﻿using UnityEngine;
+using UnityEngine.SocialPlatforms.GameCenter;
+using static SkillSO;
 
-public struct SkillData
+public class SkillData
 {
     public string skillName;
 
@@ -11,6 +13,8 @@ public struct SkillData
     public Type type;
     public Effect sideEffect;
     public float effectChance;
+    public GameObject vfx;
+    public CastZone castZone;
 
     public SkillData(SkillSO skillSO)
     {
@@ -21,5 +25,7 @@ public struct SkillData
         type = skillSO.type;
         sideEffect = skillSO.sideEffect;
         effectChance = skillSO.effectChance;
+        vfx = skillSO.vfx;
+        castZone = skillSO.castZone;
     }
 }

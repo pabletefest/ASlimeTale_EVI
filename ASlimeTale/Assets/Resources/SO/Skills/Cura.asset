@@ -20,3 +20,4 @@ MonoBehaviour:
   sideEffect: 8
   effectChance: 100
   vfx: {fileID: 1592372973558972, guid: 721cfe8018b2cd04abd0748143d2a312, type: 3}
+  castZone: 3

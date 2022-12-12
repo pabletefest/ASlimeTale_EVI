@@ -51,14 +51,13 @@ public class DataManager : MonoBehaviour
             monsterInfo.currentMP = (uint)PlayerPrefs.GetInt(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_MP_KEY, member), (int)monsterInfo.getMaxMP());
             monsterInfo.currentExp = (uint)PlayerPrefs.GetInt(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_EXP_KEY, member), 0);
 
-            PlayerPrefs.DeleteKey(UtilsHelper.MONSTER_SKILLS_KEY);
-
             string skillNames = PlayerPrefs.GetString(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_SKILLS_KEY, member), "");
 
             if(skillNames != "")
             {
                 foreach (var skillName in skillNames.Split(','))
-                    monsterInfo.Skills.Add(skillName, new SkillData(Resources.Load<SkillSO>(String.Format($"SO/Skills/{skillName}"))));
+                    if (!monsterInfo.Skills.ContainsKey(skillName))
+                        monsterInfo.Skills.Add(skillName, new SkillData(Resources.Load<SkillSO>(String.Format($"SO/Skills/{skillName}"))));
             }
 
             monstersTeam.Add(member, monsterInfo);
@@ -83,7 +82,7 @@ public class DataManager : MonoBehaviour
             PlayerPrefs.SetInt(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_HP_KEY, monsterName), (int)monsterInfo.currentHP);
             PlayerPrefs.SetInt(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_MP_KEY, monsterName), (int)monsterInfo.currentMP);
             PlayerPrefs.SetInt(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_EXP_KEY, monsterName), (int)monsterInfo.currentExp);
-            
+
             PlayerPrefs.SetString(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_SKILLS_KEY, monsterName), String.Join(",", monsterInfo.Skills.Keys));
         }
 
@@ -102,13 +101,10 @@ public class DataManager : MonoBehaviour
         monsterInfo.currentMP = (uint)PlayerPrefs.GetInt(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_MP_KEY, member), (int)monsterInfo.getMaxMP());
         monsterInfo.currentExp = (uint)PlayerPrefs.GetInt(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_EXP_KEY, member), 0);
 
-        PlayerPrefs.DeleteKey(UtilsHelper.MONSTER_SKILLS_KEY);
+        //string skillNames = PlayerPrefs.GetString(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_SKILLS_KEY, member), "Bola de Fuego");
 
-        string skillNames = PlayerPrefs.GetString(UtilsHelper.FormatKeyString(UtilsHelper.MONSTER_SKILLS_KEY, member), "Bola de Fuego");
-
-
-        foreach (var skillName in skillNames.Split(','))
-            monsterInfo.Skills.Add(skillName, new SkillData(Resources.Load<SkillSO>(String.Format($"SO/Skills/{skillName}"))));
+        //foreach (var skillName in skillNames.Split(','))
+        //    monsterInfo.Skills.Add(skillName, new SkillData(Resources.Load<SkillSO>(String.Format($"SO/Skills/{skillName}"))));
 
         monstersTeam.Add(member, monsterInfo);
         

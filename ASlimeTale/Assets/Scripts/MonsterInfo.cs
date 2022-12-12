@@ -35,9 +35,9 @@ public class MonsterInfo
         skills = new Dictionary<string, SkillData>();
         learnableSkills = new Dictionary<string, SkillData>();
 
-        //skills.Add(monsterSo.baseSkill.skillName, new SkillData(monsterSo.baseSkill));
+        skills.Add(monsterSo.baseSkill.skillName, new SkillData(monsterSo.baseSkill));
 
-        foreach(var skill in monsterSo.skills)
+        foreach(var skill in monsterSo.learnableSkills)
         {
             learnableSkills.Add(skill.skillName, new SkillData(skill));
         }

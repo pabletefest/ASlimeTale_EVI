@@ -22,5 +22,5 @@ public class MonsterSO : ScriptableObject
     public Sprite barIcon;
 
     public SkillSO baseSkill;
-    public List<SkillSO> skills;
+    public List<SkillSO> learnableSkills;
 }

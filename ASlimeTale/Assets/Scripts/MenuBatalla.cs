@@ -36,6 +36,8 @@ public class MenuBatalla : MonoBehaviour
 
     public event Action<string> onSkillSelected;
 
+    public string currentPlayerName = "Slime";
+
     // Start is called before the first frame update
     void Start()
     {
@@ -96,7 +98,7 @@ public class MenuBatalla : MonoBehaviour
         }
         else if (menuOpen == MenuType.SKILL)
         {
-            Dictionary<string, SkillData> skills = DataManager.InstanceDB.getTeamMemberByName("Slime").Skills;
+            Dictionary<string, SkillData> skills = DataManager.InstanceDB.getTeamMemberByName(currentPlayerName).Skills;
             List<string> skillNames = new List<string>(skills.Keys);
             int skillNumber = skillNames.Count;
             if (Input.GetKeyDown(KeyCode.DownArrow))
@@ -133,87 +135,10 @@ public class MenuBatalla : MonoBehaviour
         }
     }
 
-    //public string isPlayerTurn()
-    //{
-    //    string selectedAction = "";
-    //    if (menuOpen == menuType.ACTION)
-    //    {
-    //        if (Input.GetKeyDown(KeyCode.DownArrow))
-    //        {
-    //            if (currentAction == actionTexts.Count - 1)
-    //            {
-    //                currentAction = 0;
-    //            }
-    //            else
-    //            {
-    //                currentAction += 1;
-    //            }
-    //            UpdateActionSelection(currentAction);
-    //        }
-    //        if (Input.GetKeyDown(KeyCode.UpArrow))
-    //        {
-    //            if (currentAction == 0)
-    //            {
-    //                currentAction = actionTexts.Count - 1;
-    //            }
-    //            else
-    //            {
-    //                currentAction -= 1;
-    //            }
-    //            UpdateActionSelection(currentAction);
-    //        }
-    //        if (Input.GetKeyDown(KeyCode.Space))
-    //        {
-    //            if (currentAction == 1)
-    //            {
-    //                EnableActionSelection(false);
-    //                EnableSkillSelection(true);
-    //                SetSkillText();
-    //                menuOpen = menuType.SKILL;
-    //                currentAction = 0;
-    //                UpdateSkillSelection(currentAction, true);
-    //            }
-    //            if (currentAction == 4)
-    //            {
-    //                Cursor.visible = true;
-    //                UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");
-    //            }
-    //        }
-    //    }
-    //    if (menuOpen == menuType.SKILL)
-    //    {
-    //        Dictionary<string, SkillData> skills = DataManager.InstanceDB.getTeamMemberByName("Slime").Skills;
-    //        List<string> skillNames = new List<string>(skills.Keys);
-    //        int skillNumber = skillNames.Count;
-    //        if (Input.GetKeyDown(KeyCode.DownArrow))
-    //        {
-    //            if (currentAction == skillNumber - 1)
-    //            {
-    //                currentAction = 0;
-    //            }
-    //            else
-    //            {
-    //                currentAction += 1;
-    //            }
-    //            if (skillNumber == 0) UpdateSkillSelection(currentAction, true);
-    //            else UpdateSkillSelection(currentAction, false);
-    //        }
-    //        if (Input.GetKeyDown(KeyCode.UpArrow))
-    //        {
-    //            if (currentAction == 0)
-    //            {
-    //                currentAction = skillNumber - 1;
-    //            }
-    //            else
-    //            {
-    //                currentAction -= 1;
-    //            }
-    //            if (skillNumber == 0) UpdateSkillSelection(currentAction, true);
-    //            else UpdateSkillSelection(currentAction, false);
-    //        }
-    //    }
-    //    return selectedAction;
-    //}
+    public void SetCurrentPlayerName(string playerName)
+    {
+        currentPlayerName = playerName;
+    }
 
     public void UpdateActionSelection(int selectedAction)
     {
@@ -253,7 +178,8 @@ public class MenuBatalla : MonoBehaviour
 
     public void SetSkillText()
     {
-        Dictionary<string, SkillData> skills = DataManager.InstanceDB.getTeamMemberByName("Slime").Skills;
+        Debug.Log($"Current player {currentPlayerName}");
+        Dictionary<string, SkillData> skills = DataManager.InstanceDB.getTeamMemberByName(currentPlayerName).Skills;
         List<string> skillNames = new List<string>(skills.Keys);
         int skillNumber = skillNames.Count;
         if (skillNumber >= 4)
@@ -313,5 +239,14 @@ public class MenuBatalla : MonoBehaviour
     public void EnableMenu(bool enabled)
     {
         gameObject.SetActive(enabled);
+    }
+
+    public void ResetBattleMenu()
+    {
+        actionSelector.SetActive(true);
+        skillSelector.SetActive(false);
+        itemSelector.SetActive(false);
+
+        menuOpen = MenuType.ACTION;
     }
 }

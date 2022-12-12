@@ -37,8 +37,18 @@ public class SkillSO : ScriptableObject
         PLANT
     }
 
+    public enum CastZone
+    {
+        NONE,
+        PROJECTILE,
+        AREA,
+        SINGLE_UNIT_ALLY,
+        SINGLE_UNIT_OTHER
+    }
+
     public Type type;
     public Effect sideEffect;
     public float effectChance;
     public GameObject vfx;
+    public CastZone castZone;
 }

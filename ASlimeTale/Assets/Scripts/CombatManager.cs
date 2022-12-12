@@ -301,7 +301,6 @@ public class CombatManager : MonoBehaviour
 
         state = BattleState.CALCULATING;
         CalculateTurn();
-
     }
 
     void CalculateTurn()
@@ -397,6 +396,7 @@ public class CombatManager : MonoBehaviour
 
     void PlayerTurn()
     {
+        menuController.SetCurrentPlayerName(playerStats[unitCurrentTurn].monsterName);
         menuController.EnableMenu(true);
 
         //string selectedAction = "";
@@ -409,15 +409,16 @@ public class CombatManager : MonoBehaviour
 
     void PlayerAttackCallback(string skillName)
     {
-        SkillSO skill = playerStats[unitCurrentTurn].skills.Find(x => x.skillName == skillName);
+        SkillData skillData = DataManager.InstanceDB.getTeamMemberByName(playerStats[unitCurrentTurn].monsterName).Skills[skillName];
+        //SkillSO skill = skillData..Find(x => x.skillName == skillName);
 
-        if (!skill) // Default skill if something wrong occurred
-            skill = playerStats[unitCurrentTurn].baseSkill;
+        if (skillData is null) // Default skill if something wrong occurred
+            skillData = new SkillData(playerStats[unitCurrentTurn].baseSkill);
 
-        StartCoroutine(PlayerAttackCoroutine(skill)); 
+        StartCoroutine(PlayerAttackCoroutine(skillData)); 
     }
 
-    IEnumerator PlayerAttackCoroutine(SkillSO skill)
+    IEnumerator PlayerAttackCoroutine(SkillData skillData)
     {
         unitCurrentTurn.transform.LookAt(EnemyOne.transform);
 
@@ -427,6 +428,9 @@ public class CombatManager : MonoBehaviour
 
         playerAnim.SetTrigger("attack");
 
+        menuController.EnableMenu(false);
+        menuController.ResetBattleMenu();
+
         // Wait until the animation played half way
         while ((playerAnim.GetCurrentAnimatorStateInfo(0).normalizedTime % 1) < 0.5f)
             yield return null;
@@ -435,13 +439,13 @@ public class CombatManager : MonoBehaviour
         spawnPoint.z += 2;
         spawnPoint.y += 2;
 
-        GameObject vfx = Instantiate(skill.vfx, spawnPoint, unitCurrentTurn.transform.rotation);
+        GameObject vfx = Instantiate(skillData.vfx, spawnPoint, unitCurrentTurn.transform.rotation);
         vfx.transform.localScale *= 2;
         Destroy(vfx, 2.5f);
     }
 
     void EnemyTurn()
     {
-        menuController.EnableMenu(false);
+        //menuController.EnableMenu(false);
     }
 }

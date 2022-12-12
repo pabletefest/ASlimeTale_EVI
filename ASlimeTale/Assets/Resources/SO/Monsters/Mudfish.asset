@@ -23,6 +23,5 @@ MonoBehaviour:
   baseResistance: 50
   baseSpeed: 100
   barIcon: {fileID: 21300000, guid: 2f322fd874ef18a4b87888b4f6b7c8a0, type: 3}
-  baseSkill: {fileID: 11400000, guid: 868420456c63e354abb964b54be1b48b, type: 2}
-  skills:
-  - {fileID: 11400000, guid: 8912ad6d64c65e54f8d5639789de0890, type: 2}
+  baseSkill: {fileID: 11400000, guid: 8912ad6d64c65e54f8d5639789de0890, type: 2}
+  learnableSkills: []
