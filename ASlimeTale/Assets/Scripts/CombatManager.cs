@@ -92,14 +92,23 @@ public class CombatManager : MonoBehaviour
     [SerializeField]
     private GameObject turnMarker;
 
+    [SerializeField]
+    private GameObject targetSelector;
+
     List<GameObject> allCharacters = new List<GameObject>();
+    List<GameObject> enemyObjects = new List<GameObject>();
+    bool timeToSelect = false;
 
     public BattleState state;
 
     Dictionary<GameObject, MonsterSO> playerStats;
     Dictionary<GameObject, EnemySO> enemyStats;
 
+    uint enemyChosen = 0;
+
     private GameObject unitCurrentTurn = null; // Current unit for this turn (player or enemy)
+
+    string skillToUse = "";
 
     // Start is called before the first frame update
     void Start()
@@ -111,7 +120,36 @@ public class CombatManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (timeToSelect)
+        {
+            SkillData skillData = DataManager.InstanceDB.getTeamMemberByName(playerStats[unitCurrentTurn].monsterName).Skills[skillToUse];
+            //SkillSO skill = skillData..Find(x => x.skillName == skillName);
+
+            if (skillData is null) // Default skill if something wrong occurred
+                skillData = new SkillData(playerStats[unitCurrentTurn].baseSkill);
+            targetSelector.SetActive(true);
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                enemyChosen += 1;
+            }
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                enemyChosen -= 1;
+            }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                timeToSelect = false;
+                targetSelector.SetActive(false);
+                StartCoroutine(PlayerAttackCoroutine(skillData));
+            }
+            int enemyIndex = (int) (enemyChosen % enemyObjects.Count);
+            targetSelector.transform.position = enemyObjects[enemyIndex].transform.position;
+            unitCurrentTurn.transform.LookAt(enemyObjects[enemyIndex].transform.position);
+        }
+        else
+        {
+            targetSelector.SetActive(false);
+        }
     }
 
     void OnEnable()
@@ -265,6 +303,7 @@ public class CombatManager : MonoBehaviour
                 Debug.Log(OneEnemyPosition.transform.Find("PositionEnemy1").transform.rotation);
                 EnemyOne = Instantiate(enemy.enemyPrefab, OneEnemyPosition.transform.Find("PositionEnemy1").transform.position, OneEnemyPosition.transform.Find("PositionEnemy1").transform.rotation);
                 EnemyOne.GetComponent<CapsuleCollider>().isTrigger = false;
+                enemyObjects.Add(EnemyOne);
                 enemyStats.Add(EnemyOne, enemy);
                 
                 allCharacters.Add(EnemyOne);
@@ -276,6 +315,8 @@ public class CombatManager : MonoBehaviour
                 EnemyTwo.GetComponent<CapsuleCollider>().isTrigger = false;
                 allCharacters.Add(EnemyOne);
                 allCharacters.Add(EnemyTwo);
+                enemyObjects.Add(EnemyOne);
+                enemyObjects.Add(EnemyTwo);
                 enemyStats.Add(EnemyOne, enemy);
                 enemyStats.Add(EnemyTwo, enemy);
                 break;
@@ -286,6 +327,9 @@ public class CombatManager : MonoBehaviour
                 EnemyOne.GetComponent<CapsuleCollider>().isTrigger = false;
                 EnemyTwo.GetComponent<CapsuleCollider>().isTrigger = false;
                 EnemyThree.GetComponent<CapsuleCollider>().isTrigger = false;
+                enemyObjects.Add(EnemyOne);
+                enemyObjects.Add(EnemyTwo);
+                enemyObjects.Add(EnemyThree);
                 allCharacters.Add(EnemyOne);
                 allCharacters.Add(EnemyTwo);
                 allCharacters.Add(EnemyThree);
@@ -302,6 +346,10 @@ public class CombatManager : MonoBehaviour
                 EnemyTwo.GetComponent<CapsuleCollider>().isTrigger = false;
                 EnemyThree.GetComponent<CapsuleCollider>().isTrigger = false;
                 EnemyFour.GetComponent<CapsuleCollider>().isTrigger = false;
+                enemyObjects.Add(EnemyOne);
+                enemyObjects.Add(EnemyTwo);
+                enemyObjects.Add(EnemyThree);
+                enemyObjects.Add(EnemyFour);
                 allCharacters.Add(EnemyOne);
                 allCharacters.Add(EnemyTwo);
                 allCharacters.Add(EnemyThree);
@@ -439,13 +487,9 @@ public class CombatManager : MonoBehaviour
 
     void PlayerAttackCallback(string skillName)
     {
-        SkillData skillData = DataManager.InstanceDB.getTeamMemberByName(playerStats[unitCurrentTurn].monsterName).Skills[skillName];
-        //SkillSO skill = skillData..Find(x => x.skillName == skillName);
-
-        if (skillData is null) // Default skill if something wrong occurred
-            skillData = new SkillData(playerStats[unitCurrentTurn].baseSkill);
-
-        StartCoroutine(PlayerAttackCoroutine(skillData)); 
+        skillToUse = skillName;
+        timeToSelect = true;
+        
     }
 
     IEnumerator PlayerAttackCoroutine(SkillData skillData)
@@ -472,6 +516,11 @@ public class CombatManager : MonoBehaviour
         GameObject vfx = Instantiate(skillData.vfx, spawnPoint, unitCurrentTurn.transform.rotation);
         vfx.transform.localScale *= 2;
         Destroy(vfx, 2.5f);
+
+        state = BattleState.CALCULATING;
+        CalculateTurn();
+
+        yield return new WaitForSeconds(3f);
     }
 
     void EnemyTurn()
