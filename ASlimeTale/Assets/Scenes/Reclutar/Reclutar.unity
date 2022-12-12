@@ -905,8 +905,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c89842d8d6682045b06fc0ffbbf9588, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  recruitableMonster: {fileID: 0}
   SpawnPoint: {fileID: 1005210664}
+  dialogueText: {fileID: 1187309412}
 --- !u!4 &831937115
 Transform:
   m_ObjectHideFlags: 0
