@@ -150,6 +150,9 @@ public class CombatManager : MonoBehaviour
                     player1Bar.SetActive(true);
                     allCharacters.Add(PlayerOne);
                     playerStats.Add(PlayerOne, players[0]);
+
+                    PlayerOne.GetComponent<CapsuleCollider>().isTrigger = false;
+
                     camera1Player.SetActive(true);
                 }
                 break;
@@ -168,6 +171,9 @@ public class CombatManager : MonoBehaviour
                     player2Bar.SetActive(true);
                     allCharacters.Add(PlayerTwo);
                     playerStats.Add(PlayerTwo, players[1]);
+
+                    PlayerOne.GetComponent<CapsuleCollider>().isTrigger = false;
+                    PlayerTwo.GetComponent<CapsuleCollider>().isTrigger = false;
 
                     camera2Players.SetActive(true);
                 }
@@ -195,7 +201,12 @@ public class CombatManager : MonoBehaviour
                     allCharacters.Add(PlayerThree);
                     playerStats.Add(PlayerThree, players[2]);
 
+                    PlayerOne.GetComponent<CapsuleCollider>().isTrigger = false;
+                    PlayerTwo.GetComponent<CapsuleCollider>().isTrigger = false;
+                    PlayerThree.GetComponent<CapsuleCollider>().isTrigger = false;
+
                     camera3Players.SetActive(true);
+
                 }
                 break;
             case 4:
@@ -228,6 +239,10 @@ public class CombatManager : MonoBehaviour
                     allCharacters.Add(PlayerFour);
                     playerStats.Add(PlayerFour, players[3]);
 
+                    PlayerOne.GetComponent<CapsuleCollider>().isTrigger = false;
+                    PlayerTwo.GetComponent<CapsuleCollider>().isTrigger = false;
+                    PlayerThree.GetComponent<CapsuleCollider>().isTrigger = false;
+                    PlayerFour.GetComponent<CapsuleCollider>().isTrigger = false;
                     camera4Players.SetActive(true);
                 }
                 break;
@@ -249,6 +264,7 @@ public class CombatManager : MonoBehaviour
                 Debug.Log(OneEnemyPosition.transform.Find("PositionEnemy1").transform.position);
                 Debug.Log(OneEnemyPosition.transform.Find("PositionEnemy1").transform.rotation);
                 EnemyOne = Instantiate(enemy.enemyPrefab, OneEnemyPosition.transform.Find("PositionEnemy1").transform.position, OneEnemyPosition.transform.Find("PositionEnemy1").transform.rotation);
+                EnemyOne.GetComponent<CapsuleCollider>().isTrigger = false;
                 enemyStats.Add(EnemyOne, enemy);
                 
                 allCharacters.Add(EnemyOne);
@@ -256,6 +272,8 @@ public class CombatManager : MonoBehaviour
             case 2:
                 EnemyOne = Instantiate(enemy.enemyPrefab, TwoEnemiesPosition.transform.Find("PositionEnemy1").transform.position, TwoEnemiesPosition.transform.Find("PositionEnemy1").transform.rotation);
                 EnemyTwo = Instantiate(enemy.enemyPrefab, TwoEnemiesPosition.transform.Find("PositionEnemy2").transform.position, TwoEnemiesPosition.transform.Find("PositionEnemy2").transform.rotation);
+                EnemyOne.GetComponent<CapsuleCollider>().isTrigger = false;
+                EnemyTwo.GetComponent<CapsuleCollider>().isTrigger = false;
                 allCharacters.Add(EnemyOne);
                 allCharacters.Add(EnemyTwo);
                 enemyStats.Add(EnemyOne, enemy);
@@ -265,6 +283,9 @@ public class CombatManager : MonoBehaviour
                 EnemyOne = Instantiate(enemy.enemyPrefab, ThreeEnemiesPosition.transform.Find("PositionEnemy1").transform.position, ThreeEnemiesPosition.transform.Find("PositionEnemy1").transform.rotation);
                 EnemyTwo = Instantiate(enemy.enemyPrefab, ThreeEnemiesPosition.transform.Find("PositionEnemy2").transform.position, ThreeEnemiesPosition.transform.Find("PositionEnemy2").transform.rotation);
                 EnemyThree = Instantiate(enemy.enemyPrefab, ThreeEnemiesPosition.transform.Find("PositionEnemy3").transform.position, ThreeEnemiesPosition.transform.Find("PositionEnemy3").transform.rotation);
+                EnemyOne.GetComponent<CapsuleCollider>().isTrigger = false;
+                EnemyTwo.GetComponent<CapsuleCollider>().isTrigger = false;
+                EnemyThree.GetComponent<CapsuleCollider>().isTrigger = false;
                 allCharacters.Add(EnemyOne);
                 allCharacters.Add(EnemyTwo);
                 allCharacters.Add(EnemyThree);
@@ -277,6 +298,10 @@ public class CombatManager : MonoBehaviour
                 EnemyTwo = Instantiate(enemy.enemyPrefab, FourEnemiesPosition.transform.Find("PositionEnemy2").transform.position, FourEnemiesPosition.transform.Find("PositionEnemy2").transform.rotation);
                 EnemyThree = Instantiate(enemy.enemyPrefab, FourEnemiesPosition.transform.Find("PositionEnemy3").transform.position, FourEnemiesPosition.transform.Find("PositionEnemy3").transform.rotation);
                 EnemyFour = Instantiate(enemy.enemyPrefab, FourEnemiesPosition.transform.Find("PositionEnemy4").transform.position, FourEnemiesPosition.transform.Find("PositionEnemy4").transform.rotation);
+                EnemyOne.GetComponent<CapsuleCollider>().isTrigger = false;
+                EnemyTwo.GetComponent<CapsuleCollider>().isTrigger = false;
+                EnemyThree.GetComponent<CapsuleCollider>().isTrigger = false;
+                EnemyFour.GetComponent<CapsuleCollider>().isTrigger = false;
                 allCharacters.Add(EnemyOne);
                 allCharacters.Add(EnemyTwo);
                 allCharacters.Add(EnemyThree);
