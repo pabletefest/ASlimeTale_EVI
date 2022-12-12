@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -95,6 +96,8 @@ public class CombatManager : MonoBehaviour
     Dictionary<GameObject, MonsterSO> playerStats;
     Dictionary<GameObject, EnemySO> enemyStats;
 
+    private GameObject unitCurrentTurn = null; // Current unit for this turn (player or enemy)
+
     // Start is called before the first frame update
     void Start()
     {
@@ -106,6 +109,16 @@ public class CombatManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    void OnEnable()
+    {
+        menuController.onSkillSelected += PlayerAttackCallback;
+    }
+
+    void OnDisabled()
+    {
+        menuController.onSkillSelected -= PlayerAttackCallback;
     }
 
     void InstantiatePlayers()
@@ -312,6 +325,8 @@ public class CombatManager : MonoBehaviour
                 fastestCharacter = character;
             }
         }
+
+        unitCurrentTurn = fastestCharacter;
         allCharacters.Remove(fastestCharacter);
 
         if (enemyStats.ContainsKey(fastestCharacter))
@@ -382,21 +397,51 @@ public class CombatManager : MonoBehaviour
 
     void PlayerTurn()
     {
-        string selectedAction = "";
-        while(selectedAction.Equals(""))
-        {
-            selectedAction = menuController.isPlayerTurn();
-        }
-        StartCoroutine(PlayerAnimation(selectedAction));
+        menuController.EnableMenu(true);
+
+        //string selectedAction = "";
+        //while(selectedAction.Equals(""))
+        //{
+        //    selectedAction = menuController.isPlayerTurn();
+        //}
+        //StartCoroutine(PlayerAnimation(selectedAction));
     }
 
-    IEnumerator PlayerAnimation(string action)
+    void PlayerAttackCallback(string skillName)
     {
-        yield return new WaitForSeconds(5f);
+        SkillSO skill = playerStats[unitCurrentTurn].skills.Find(x => x.skillName == skillName);
+
+        if (!skill) // Default skill if something wrong occurred
+            skill = playerStats[unitCurrentTurn].baseSkill;
+
+        StartCoroutine(PlayerAttackCoroutine(skill)); 
+    }
+
+    IEnumerator PlayerAttackCoroutine(SkillSO skill)
+    {
+        unitCurrentTurn.transform.LookAt(EnemyOne.transform);
+
+        //yield return new WaitForSeconds(0.1f);
+
+        Animator playerAnim = unitCurrentTurn.GetComponent<Animator>();
+
+        playerAnim.SetTrigger("attack");
+
+        // Wait until the animation played half way
+        while ((playerAnim.GetCurrentAnimatorStateInfo(0).normalizedTime % 1) < 0.5f)
+            yield return null;
+
+        Vector3 spawnPoint = unitCurrentTurn.transform.position;
+        spawnPoint.z += 2;
+        spawnPoint.y += 2;
+
+        GameObject vfx = Instantiate(skill.vfx, spawnPoint, unitCurrentTurn.transform.rotation);
+        vfx.transform.localScale *= 2;
+        Destroy(vfx, 2.5f);
     }
 
     void EnemyTurn()
     {
-
+        menuController.EnableMenu(false);
     }
 }
