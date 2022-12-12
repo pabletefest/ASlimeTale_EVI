@@ -19,4 +19,4 @@ MonoBehaviour:
   type: 1
   sideEffect: 1
   effectChance: 15
-  vfx: {fileID: 1343504842343394, guid: df7af1a2f7d29504aaa8286f9ddf60dd, type: 3}
+  vfx: {fileID: 1079946990457772, guid: 8b89bf46dd9737547be9c8715eefed3d, type: 3}
