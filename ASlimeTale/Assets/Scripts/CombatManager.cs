@@ -528,6 +528,7 @@ public class CombatManager : MonoBehaviour
         //yield return new WaitForSeconds(0.1f);
 
         Animator playerAnim = unitCurrentTurn.GetComponent<Animator>();
+        Animator enemyAnim = enemyAttacked.GetComponent<Animator>();
 
         playerAnim.SetTrigger("hit");
 
@@ -569,10 +570,14 @@ public class CombatManager : MonoBehaviour
         else
             magicBarImage.fillAmount -= spellCost;
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1.5f);
 
+
+        enemyAnim.SetTrigger("getHit");
         if (enemyHPs[enemyIndex] <= 0 || enemyHPs[enemyIndex] > 2000)
         {
+            enemyAnim.SetTrigger("die");
+            yield return new WaitForSeconds(2f);
             enemyObjects[enemyIndex].SetActive(false);
             allCharacters.Remove(enemyObjects[enemyIndex]);
             enemyObjects.RemoveAt(enemyIndex);
@@ -580,7 +585,7 @@ public class CombatManager : MonoBehaviour
         }
 
         //vfx.transform.LookAt(enemyObjects[enemyIndex].transform.position);
-        Destroy(vfx, 2.5f);
+        Destroy(vfx, 1.5f);
 
         state = BattleState.CALCULATING;
         CalculateTurn();
@@ -640,6 +645,7 @@ public class CombatManager : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
         var playerAnimator = playerTarget.GetComponent<Animator>();
+        playerAnimator.SetTrigger("getHit");
 
         var targetPlayerBar = statusBars.FindAll(bar => bar.activeSelf)[playerIndex];
         var lifeBarImage = targetPlayerBar.transform.Find("LifeBar").GetComponent<Image>();
