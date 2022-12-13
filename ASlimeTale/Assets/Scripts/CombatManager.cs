@@ -529,7 +529,7 @@ public class CombatManager : MonoBehaviour
 
         Animator playerAnim = unitCurrentTurn.GetComponent<Animator>();
 
-        playerAnim.SetTrigger("attack");
+        playerAnim.SetTrigger("hit");
 
         menuController.EnableMenu(false);
         menuController.ResetBattleMenu();
@@ -568,6 +568,8 @@ public class CombatManager : MonoBehaviour
             magicBarImage.fillAmount = 0;
         else
             magicBarImage.fillAmount -= spellCost;
+
+        yield return new WaitForSeconds(2f);
 
         if (enemyHPs[enemyIndex] <= 0 || enemyHPs[enemyIndex] > 2000)
         {
