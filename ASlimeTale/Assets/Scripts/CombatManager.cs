@@ -98,6 +98,9 @@ public class CombatManager : MonoBehaviour
     [SerializeField]
     private GameObject targetSelector;
 
+    [SerializeField]
+    private Text feedback;
+
     List<GameObject> allCharacters = new List<GameObject>();
     List<GameObject> enemyObjects = new List<GameObject>();
     bool timeToSelect = false;
@@ -320,6 +323,7 @@ public class CombatManager : MonoBehaviour
                 enemyObjects.Add(EnemyOne);
                 enemyStats.Add(EnemyOne, enemy);
                 enemyHPs.Add(enemyStats[EnemyOne].baseMaxHP);
+                feedback.text = "¡Ha aparecido un enemigo!";
                 
                 allCharacters.Add(EnemyOne);
                 break;
@@ -336,6 +340,7 @@ public class CombatManager : MonoBehaviour
                 enemyStats.Add(EnemyTwo, enemy);
                 enemyHPs.Add(enemyStats[EnemyOne].baseMaxHP);
                 enemyHPs.Add(enemyStats[EnemyTwo].baseMaxHP);
+                feedback.text = "¡Han aparecido dos enemigos!";
                 break;
             case 3:
                 EnemyOne = Instantiate(enemy.enemyPrefab, ThreeEnemiesPosition.transform.Find("PositionEnemy1").transform.position, ThreeEnemiesPosition.transform.Find("PositionEnemy1").transform.rotation);
@@ -356,6 +361,7 @@ public class CombatManager : MonoBehaviour
                 enemyHPs.Add(enemyStats[EnemyOne].baseMaxHP);
                 enemyHPs.Add(enemyStats[EnemyTwo].baseMaxHP);
                 enemyHPs.Add(enemyStats[EnemyThree].baseMaxHP);
+                feedback.text = "¡Han aparecido tres enemigos!";
                 break;
             case 4:
                 EnemyOne = Instantiate(enemy.enemyPrefab, FourEnemiesPosition.transform.Find("PositionEnemy1").transform.position, FourEnemiesPosition.transform.Find("PositionEnemy1").transform.rotation);
@@ -382,6 +388,7 @@ public class CombatManager : MonoBehaviour
                 enemyHPs.Add(enemyStats[EnemyTwo].baseMaxHP);
                 enemyHPs.Add(enemyStats[EnemyThree].baseMaxHP);
                 enemyHPs.Add(enemyStats[EnemyFour].baseMaxHP);
+                feedback.text = "¡Han aparecido cuatro enemigos!";
                 break;
         }
     }
@@ -505,7 +512,7 @@ public class CombatManager : MonoBehaviour
         menuController.EnableMenu(true);
         turnMarker.transform.position = unitCurrentTurn.transform.position;
         turnMarker.SetActive(true);
-
+        feedback.text = "Elige una acción."; 
         //string selectedAction = "";
         //while(selectedAction.Equals(""))
         //{
@@ -554,10 +561,12 @@ public class CombatManager : MonoBehaviour
 
         GameObject vfx = Instantiate(skillData.vfx, spawnPoint, unitCurrentTurn.transform.rotation);
         vfx.transform.localScale *= 2;
-
+        string playerDisplayName = unitCurrentTurn.name.Substring(0, unitCurrentTurn.name.Length - 7);
+        feedback.text = playerDisplayName + " ha lanzado " + skillData.skillName + ".";
         int enemyIndex = (int)(enemyChosen % enemyObjects.Count);
 
         enemyHPs[enemyIndex] -= skillData.power;
+
         var playersGOs = playerStats.Keys.ToList();
         var playerIndex = playersGOs.IndexOf(unitCurrentTurn);
         var targetPlayerBar = statusBars.FindAll(bar => bar.activeSelf)[playerIndex];
@@ -572,12 +581,15 @@ public class CombatManager : MonoBehaviour
 
         yield return new WaitForSeconds(1.5f);
 
-
+        string enemyDisplayName = enemyObjects[enemyIndex].name.Substring(0, enemyObjects[enemyIndex].name.Length - 7);
+        feedback.text = enemyDisplayName + " ha recibido " + skillData.power + " puntos de daño.";
         enemyAnim.SetTrigger("getHit");
         if (enemyHPs[enemyIndex] <= 0 || enemyHPs[enemyIndex] > 2000)
         {
             enemyAnim.SetTrigger("die");
+            Destroy(vfx, 1f);
             yield return new WaitForSeconds(2f);
+            feedback.text = enemyDisplayName + " ha sido derrotado.";
             enemyObjects[enemyIndex].SetActive(false);
             allCharacters.Remove(enemyObjects[enemyIndex]);
             enemyObjects.RemoveAt(enemyIndex);
@@ -585,8 +597,9 @@ public class CombatManager : MonoBehaviour
         }
 
         //vfx.transform.LookAt(enemyObjects[enemyIndex].transform.position);
-        Destroy(vfx, 1.5f);
+        Destroy(vfx, 1f);
 
+        yield return new WaitForSeconds(1f);
         state = BattleState.CALCULATING;
         CalculateTurn();
 
@@ -595,7 +608,7 @@ public class CombatManager : MonoBehaviour
 
     void EnemyTurn()
     {
-
+        turnMarker.SetActive(false);
         var playersGOs = playerStats.Keys.ToList();
         var playerIndex = Random.Range(0, playersGOs.Count);
         var randomSelected = playersGOs[playerIndex];
@@ -617,6 +630,9 @@ public class CombatManager : MonoBehaviour
         var enemyAnimator = unitCurrentTurn.GetComponent<Animator>();
 
         enemyAnimator.SetTrigger("run");
+        string enemyDisplayName = unitCurrentTurn.name.Substring(0, unitCurrentTurn.name.Length - 7);
+        string playerDisplayName = playerTarget.name.Substring(0, playerTarget.name.Length - 7);
+        feedback.text = "¡" + enemyDisplayName + " ataca!";
 
         float speed = 8f;
 
@@ -652,10 +668,14 @@ public class CombatManager : MonoBehaviour
 
         float randomDamage = Random.Range(0.15f, 0.25f);
 
+        feedback.text = playerDisplayName + " ha recibido " + (int) (randomDamage * 100) + " puntos de daño";
+
         if (lifeBarImage.fillAmount < randomDamage)
         {
+            yield return new WaitForSeconds(1f);
             lifeBarImage.fillAmount = 0;
             playerAnimator.SetTrigger("die");
+            feedback.text = playerDisplayName + " ha sido derrotado.";
         }
         else
             lifeBarImage.fillAmount -= randomDamage;
