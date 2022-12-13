@@ -184,29 +184,56 @@ public class MenuBatalla : MonoBehaviour
         int skillNumber = skillNames.Count;
         if (skillNumber >= 4)
         {
-            skillTexts[0].text = skillNames[0];
-            skillTexts[1].text = skillNames[1];
-            skillTexts[2].text = skillNames[2];
-            skillTexts[3].text = skillNames[3];
+            for(int i = 0; i < 4; i++)
+			{
+                if (!skillNames[i].Equals("Ataque"))
+                    skillTexts[i].text = skillNames[i];
+                else
+                {
+                    skillTexts[i].text = "";
+                    skillNumber -= 1;
+                }
+			}
         }
         else if (skillNumber == 3)
         {
-            skillTexts[0].text = skillNames[0];
-            skillTexts[1].text = skillNames[1];
-            skillTexts[2].text = skillNames[2];
+            for (int i = 0; i < 3; i++)
+            {
+                if (!skillNames[i].Equals("Ataque"))
+                    skillTexts[i].text = skillNames[i];
+                else
+                {
+                    skillTexts[i].text = "";
+                    skillNumber -= 1;
+                }
+            }
             skillTexts[3].text = "";
         }
         else if (skillNumber == 2)
         {
-            skillTexts[0].text = skillNames[0];
-            skillTexts[1].text = skillNames[1];
+            for (int i = 0; i < 2; i++)
+            {
+                if (!skillNames[i].Equals("Ataque"))
+                    skillTexts[i].text = skillNames[i];
+                else
+                {
+                    skillTexts[i].text = "";
+                    skillNumber -= 1;
+                }
+            }
             skillTexts[2].text = "";
             skillTexts[3].text = "";
 
         }
         else if (skillNumber == 1)
         {
-            skillTexts[0].text = skillNames[0];
+            if (!skillNames[0].Equals("Ataque"))
+                skillTexts[0].text = skillNames[0];
+            else
+            {
+                skillTexts[0].text = "";
+                skillNumber -= 1;
+            }
             skillTexts[1].text = "";
             skillTexts[2].text = "";
             skillTexts[3].text = "";
