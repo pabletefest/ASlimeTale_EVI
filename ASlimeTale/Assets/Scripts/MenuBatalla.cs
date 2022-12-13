@@ -239,6 +239,8 @@ public class MenuBatalla : MonoBehaviour
     public void EnableMenu(bool enabled)
     {
         gameObject.SetActive(enabled);
+        UpdateActionSelection(currentAction);
+        menuOpen = MenuType.ACTION;
     }
 
     public void ResetBattleMenu()
