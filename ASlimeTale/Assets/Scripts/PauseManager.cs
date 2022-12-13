@@ -7,6 +7,9 @@ public class PauseManager : MonoBehaviour
     [SerializeField]
     private GameObject menuPausa;
 
+    [SerializeField]
+    private AudioSource music;
+
     private bool menuShown = false;
 
     // Start is called before the first frame update
@@ -25,12 +28,14 @@ public class PauseManager : MonoBehaviour
                 Time.timeScale = 0;
                 menuPausa.SetActive(true);
                 menuShown = true;
+                music.Pause();
             }
             else
             {
                 Time.timeScale = 1;
                 menuPausa.SetActive(false);
                 menuShown = false;
+                music.Play();
             }
         }
     }
