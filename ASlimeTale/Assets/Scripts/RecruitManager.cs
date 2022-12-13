@@ -28,7 +28,7 @@ public class RecruitManager : MonoBehaviour
     void Update()
     {
         //Provisional press enter to recruit
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             //Add monster to team
             DataManager.InstanceDB.AddTeamMember(monsterName);
@@ -56,17 +56,17 @@ public class RecruitManager : MonoBehaviour
 		{
             case "Cactoro":
                 dialogueText.text = "Ándale limo, dame unos tacos al pastor y me uniré a ti.";
-                recruitText.text = "Presiona Enter para darle los tacos.";
+                recruitText.text = "Presiona Espacio para darle los tacos.";
                 break;
 
             case "Abelago":
                 dialogueText.text = "Bzzz ¿Unirme a ti? ¡Perfecto! Necesito un compañero para irme de aventuras. Bzzz";
-                recruitText.text = "Presiona Enter para contestarle 'Bzzz'.";
+                recruitText.text = "Presiona Espacio para contestarle 'Bzzz'.";
                 break;
 
             case "Mudfish":
                 dialogueText.text = "Puedo ir contigo pero vas a tener que regarme a menudo.";
-                recruitText.text = "Presiona Enter para tirarle un cubo de agua.";
+                recruitText.text = "Presiona Espacio para tirarle un cubo de agua.";
                 break;
         }
 	}
