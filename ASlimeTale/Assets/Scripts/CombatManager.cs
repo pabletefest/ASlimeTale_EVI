@@ -157,7 +157,8 @@ public class CombatManager : MonoBehaviour
             int enemyIndex = (int) (enemyChosen % enemyObjects.Count);
             enemyAttacked = enemyObjects[enemyIndex];
             targetSelector.transform.position = enemyAttacked.transform.position;
-            unitCurrentTurn.transform.LookAt(enemyObjects[enemyIndex].transform.position);
+            if(playerStats.ContainsKey(unitCurrentTurn))
+                unitCurrentTurn.transform.LookAt(enemyObjects[enemyIndex].transform.position);
         }
         else
         {
@@ -541,7 +542,7 @@ public class CombatManager : MonoBehaviour
         if (skillData.castZone == SkillSO.CastZone.PROJECTILE)
         {
             spawnPoint = unitCurrentTurn.transform.position;
-            spawnPoint.z += 2;
+            //spawnPoint.z += 2;
             spawnPoint.y += 2;
         }else if(skillData.castZone == SkillSO.CastZone.AREA){
             spawnPoint = enemyAttacked.transform.position;
@@ -561,6 +562,7 @@ public class CombatManager : MonoBehaviour
         {
             enemyObjects[enemyIndex].SetActive(false);
             enemyObjects.RemoveAt(enemyIndex);
+            enemyHPs.RemoveAt(enemyIndex);
         }
 
         //vfx.transform.LookAt(enemyObjects[enemyIndex].transform.position);
