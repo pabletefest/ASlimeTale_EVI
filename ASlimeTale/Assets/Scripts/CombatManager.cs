@@ -476,22 +476,22 @@ public class CombatManager : MonoBehaviour
         switch (enemyObjects.Count)
         {
             case 1:
-                allCharacters.Add(EnemyOne);
+                if(enemyHPs[0] > 0 && enemyHPs[0] < 2000) allCharacters.Add(enemyObjects[0]);
                 break;
             case 2:
-                allCharacters.Add(EnemyOne);
-                allCharacters.Add(EnemyTwo);
+                if (enemyHPs[0] > 0 && enemyHPs[0] < 2000) allCharacters.Add(enemyObjects[0]);
+                if (enemyHPs[1] > 0 && enemyHPs[1] < 2000) allCharacters.Add(enemyObjects[1]);
                 break;
             case 3:
-                allCharacters.Add(EnemyOne);
-                allCharacters.Add(EnemyTwo);
-                allCharacters.Add(EnemyThree);
+                if (enemyHPs[0] > 0 && enemyHPs[0] < 2000) allCharacters.Add(enemyObjects[0]);
+                if (enemyHPs[1] > 0 && enemyHPs[1] < 2000) allCharacters.Add(enemyObjects[1]);
+                if (enemyHPs[2] > 0 && enemyHPs[2] < 2000) allCharacters.Add(enemyObjects[2]);
                 break;
             case 4:
-                allCharacters.Add(EnemyOne);
-                allCharacters.Add(EnemyTwo);
-                allCharacters.Add(EnemyThree);
-                allCharacters.Add(EnemyFour);
+                if (enemyHPs[0] > 0 && enemyHPs[0] < 2000) allCharacters.Add(enemyObjects[0]);
+                if (enemyHPs[1] > 0 && enemyHPs[1] < 2000) allCharacters.Add(enemyObjects[1]);
+                if (enemyHPs[2] > 0 && enemyHPs[2] < 2000) allCharacters.Add(enemyObjects[2]);
+                if (enemyHPs[3] > 0 && enemyHPs[3] < 2000) allCharacters.Add(enemyObjects[3]);
                 break;
         }
 
@@ -542,7 +542,7 @@ public class CombatManager : MonoBehaviour
         if (skillData.castZone == SkillSO.CastZone.PROJECTILE)
         {
             spawnPoint = unitCurrentTurn.transform.position;
-            //spawnPoint.z += 2;
+            spawnPoint.z += 1;
             spawnPoint.y += 2;
         }else if(skillData.castZone == SkillSO.CastZone.AREA){
             spawnPoint = enemyAttacked.transform.position;
@@ -572,6 +572,7 @@ public class CombatManager : MonoBehaviour
         if (enemyHPs[enemyIndex] <= 0 || enemyHPs[enemyIndex] > 2000)
         {
             enemyObjects[enemyIndex].SetActive(false);
+            allCharacters.Remove(enemyObjects[enemyIndex]);
             enemyObjects.RemoveAt(enemyIndex);
             enemyHPs.RemoveAt(enemyIndex);
         }
@@ -636,6 +637,7 @@ public class CombatManager : MonoBehaviour
         //    yield return null;
 
         yield return new WaitForSeconds(0.5f);
+        var playerAnimator = playerTarget.GetComponent<Animator>();
 
         var targetPlayerBar = statusBars.FindAll(bar => bar.activeSelf)[playerIndex];
         var lifeBarImage = targetPlayerBar.transform.Find("LifeBar").GetComponent<Image>();
@@ -643,7 +645,10 @@ public class CombatManager : MonoBehaviour
         float randomDamage = Random.Range(0.15f, 0.25f);
 
         if (lifeBarImage.fillAmount < randomDamage)
+        {
             lifeBarImage.fillAmount = 0;
+            playerAnimator.SetTrigger("die");
+        }
         else
             lifeBarImage.fillAmount -= randomDamage;
 
