@@ -557,8 +557,19 @@ public class CombatManager : MonoBehaviour
         int enemyIndex = (int)(enemyChosen % enemyObjects.Count);
 
         enemyHPs[enemyIndex] -= skillData.power;
+        var playersGOs = playerStats.Keys.ToList();
+        var playerIndex = playersGOs.IndexOf(unitCurrentTurn);
+        var targetPlayerBar = statusBars.FindAll(bar => bar.activeSelf)[playerIndex];
+        var magicBarImage = targetPlayerBar.transform.Find("MagicBar").GetComponent<Image>();
 
-        if(enemyHPs[enemyIndex] <= 0 || enemyHPs[enemyIndex] > 2000)
+        float spellCost = 0.1f;
+
+        if (magicBarImage.fillAmount < spellCost)
+            magicBarImage.fillAmount = 0;
+        else
+            magicBarImage.fillAmount -= spellCost;
+
+        if (enemyHPs[enemyIndex] <= 0 || enemyHPs[enemyIndex] > 2000)
         {
             enemyObjects[enemyIndex].SetActive(false);
             enemyObjects.RemoveAt(enemyIndex);
