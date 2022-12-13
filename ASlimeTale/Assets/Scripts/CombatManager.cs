@@ -537,9 +537,18 @@ public class CombatManager : MonoBehaviour
         while ((playerAnim.GetCurrentAnimatorStateInfo(0).normalizedTime % 1) < 0.5f)
             yield return null;
 
-        Vector3 spawnPoint = unitCurrentTurn.transform.position;
-        spawnPoint.z += 2;
-        spawnPoint.y += 2;
+        Vector3 spawnPoint = new Vector3();
+        if (skillData.castZone == SkillSO.CastZone.PROJECTILE)
+        {
+            spawnPoint = unitCurrentTurn.transform.position;
+            spawnPoint.z += 2;
+            spawnPoint.y += 2;
+        }else if(skillData.castZone == SkillSO.CastZone.AREA){
+            spawnPoint = enemyAttacked.transform.position;
+        }else if(skillData.castZone == SkillSO.CastZone.SINGLE_UNIT_OTHER)
+        {
+            spawnPoint = enemyAttacked.transform.position;
+        }
 
         GameObject vfx = Instantiate(skillData.vfx, spawnPoint, unitCurrentTurn.transform.rotation);
         vfx.transform.localScale *= 2;
@@ -548,7 +557,7 @@ public class CombatManager : MonoBehaviour
 
         enemyHPs[enemyIndex] -= skillData.power;
 
-        if(enemyHPs[enemyIndex] <= 0)
+        if(enemyHPs[enemyIndex] <= 0 || enemyHPs[enemyIndex] > 2000)
         {
             enemyObjects[enemyIndex].SetActive(false);
             enemyObjects.RemoveAt(enemyIndex);
