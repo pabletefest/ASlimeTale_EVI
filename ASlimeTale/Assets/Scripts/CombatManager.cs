@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public enum BattleState { START, CALCULATING, PLAYERTURN, ENEMYTURN, PLAYERANIM, ENEMYANIM, FULLROUND, WON, LOST }
 
@@ -112,6 +113,10 @@ public class CombatManager : MonoBehaviour
 
     string skillToUse = "";
 
+    private GameObject enemyAttacked;
+
+    private List<uint> enemyHPs = new List<uint>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -150,7 +155,8 @@ public class CombatManager : MonoBehaviour
                 StartCoroutine(PlayerAttackCoroutine(skillData));
             }
             int enemyIndex = (int) (enemyChosen % enemyObjects.Count);
-            targetSelector.transform.position = enemyObjects[enemyIndex].transform.position;
+            enemyAttacked = enemyObjects[enemyIndex];
+            targetSelector.transform.position = enemyAttacked.transform.position;
             unitCurrentTurn.transform.LookAt(enemyObjects[enemyIndex].transform.position);
         }
         else
@@ -312,6 +318,7 @@ public class CombatManager : MonoBehaviour
                 EnemyOne.GetComponent<CapsuleCollider>().isTrigger = false;
                 enemyObjects.Add(EnemyOne);
                 enemyStats.Add(EnemyOne, enemy);
+                enemyHPs.Add(enemyStats[EnemyOne].baseMaxHP);
                 
                 allCharacters.Add(EnemyOne);
                 break;
@@ -326,6 +333,8 @@ public class CombatManager : MonoBehaviour
                 enemyObjects.Add(EnemyTwo);
                 enemyStats.Add(EnemyOne, enemy);
                 enemyStats.Add(EnemyTwo, enemy);
+                enemyHPs.Add(enemyStats[EnemyOne].baseMaxHP);
+                enemyHPs.Add(enemyStats[EnemyTwo].baseMaxHP);
                 break;
             case 3:
                 EnemyOne = Instantiate(enemy.enemyPrefab, ThreeEnemiesPosition.transform.Find("PositionEnemy1").transform.position, ThreeEnemiesPosition.transform.Find("PositionEnemy1").transform.rotation);
@@ -343,6 +352,9 @@ public class CombatManager : MonoBehaviour
                 enemyStats.Add(EnemyOne, enemy);
                 enemyStats.Add(EnemyTwo, enemy);
                 enemyStats.Add(EnemyThree, enemy);
+                enemyHPs.Add(enemyStats[EnemyOne].baseMaxHP);
+                enemyHPs.Add(enemyStats[EnemyTwo].baseMaxHP);
+                enemyHPs.Add(enemyStats[EnemyThree].baseMaxHP);
                 break;
             case 4:
                 EnemyOne = Instantiate(enemy.enemyPrefab, FourEnemiesPosition.transform.Find("PositionEnemy1").transform.position, FourEnemiesPosition.transform.Find("PositionEnemy1").transform.rotation);
@@ -365,6 +377,10 @@ public class CombatManager : MonoBehaviour
                 enemyStats.Add(EnemyTwo, enemy);
                 enemyStats.Add(EnemyThree, enemy);
                 enemyStats.Add(EnemyFour, enemy);
+                enemyHPs.Add(enemyStats[EnemyOne].baseMaxHP);
+                enemyHPs.Add(enemyStats[EnemyTwo].baseMaxHP);
+                enemyHPs.Add(enemyStats[EnemyThree].baseMaxHP);
+                enemyHPs.Add(enemyStats[EnemyFour].baseMaxHP);
                 break;
         }
     }
@@ -411,7 +427,12 @@ public class CombatManager : MonoBehaviour
         unitCurrentTurn = fastestCharacter;
         allCharacters.Remove(fastestCharacter);
 
-        if (enemyStats.ContainsKey(fastestCharacter))
+        if(enemyObjects.Count == 0)
+        {
+            state = BattleState.WON;
+            Win();
+        }
+        else if (enemyStats.ContainsKey(fastestCharacter))
         {
             state = BattleState.ENEMYTURN;
             EnemyTurn();
@@ -451,7 +472,7 @@ public class CombatManager : MonoBehaviour
                 break;
         }
 
-        switch (enemies.Count)
+        switch (enemyObjects.Count)
         {
             case 1:
                 allCharacters.Add(EnemyOne);
@@ -522,7 +543,17 @@ public class CombatManager : MonoBehaviour
 
         GameObject vfx = Instantiate(skillData.vfx, spawnPoint, unitCurrentTurn.transform.rotation);
         vfx.transform.localScale *= 2;
-        //int enemyIndex = (int)(enemyChosen % enemyObjects.Count);
+
+        int enemyIndex = (int)(enemyChosen % enemyObjects.Count);
+
+        enemyHPs[enemyIndex] -= skillData.power;
+
+        if(enemyHPs[enemyIndex] <= 0)
+        {
+            enemyObjects[enemyIndex].SetActive(false);
+            enemyObjects.RemoveAt(enemyIndex);
+        }
+
         //vfx.transform.LookAt(enemyObjects[enemyIndex].transform.position);
         Destroy(vfx, 2.5f);
 
@@ -534,16 +565,11 @@ public class CombatManager : MonoBehaviour
 
     void EnemyTurn()
     {
-        turnMarker.transform.position = unitCurrentTurn.transform.position;
-        turnMarker.SetActive(true);
 
         var playersGOs = playerStats.Keys.ToList();
         var playerIndex = Random.Range(0, playersGOs.Count);
         var randomSelected = playersGOs[playerIndex];
         unitCurrentTurn.transform.LookAt(randomSelected.transform);
-
-        targetSelector.transform.position = randomSelected.transform.position;
-        targetSelector.SetActive(true);
 
         StartCoroutine(EnemyAttackCoroutine(randomSelected, playerIndex));
 
@@ -552,6 +578,8 @@ public class CombatManager : MonoBehaviour
 
     IEnumerator EnemyAttackCoroutine(GameObject playerTarget, int playerIndex)
     {
+        unitCurrentTurn.transform.LookAt(playerTarget.transform);
+
         Vector3 originPos = unitCurrentTurn.transform.position;
 
         yield return new WaitForSeconds(2f);
@@ -606,5 +634,18 @@ public class CombatManager : MonoBehaviour
 
         state = BattleState.CALCULATING;
         CalculateTurn();
+    }
+
+    void Win()
+    {
+        AsyncOperation asyncOp = SceneManager.UnloadSceneAsync("Combat");
+        asyncOp.completed += (AsyncOperation op) => {
+
+            SceneManager.SetActiveScene(SceneManager.GetSceneByName("LlanuraAfable"));
+            var sceneGOs = SceneManager.GetActiveScene().GetRootGameObjects();
+
+            foreach (var go in sceneGOs)
+                go.SetActive(true);
+        };
     }
 }
