@@ -8,6 +8,9 @@ public class PauseManager : MonoBehaviour
     private GameObject menuPausa;
 
     [SerializeField]
+    private GameObject panel;
+
+    [SerializeField]
     private AudioSource music;
 
     private bool menuShown = false;
@@ -27,6 +30,7 @@ public class PauseManager : MonoBehaviour
             {
                 Time.timeScale = 0;
                 menuPausa.SetActive(true);
+                panel.SetActive(true);
                 menuShown = true;
                 music.Pause();
             }
@@ -34,6 +38,7 @@ public class PauseManager : MonoBehaviour
             {
                 Time.timeScale = 1;
                 menuPausa.SetActive(false);
+                panel.SetActive(false);
                 menuShown = false;
                 music.Play();
             }
