@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
@@ -122,12 +124,17 @@ public class CombatManager : MonoBehaviour
     {
         if (timeToSelect)
         {
+            if (!unitCurrentTurn || skillToUse == "")
+                return;
+
             SkillData skillData = DataManager.InstanceDB.getTeamMemberByName(playerStats[unitCurrentTurn].monsterName).Skills[skillToUse];
             //SkillSO skill = skillData..Find(x => x.skillName == skillName);
 
             if (skillData is null) // Default skill if something wrong occurred
                 skillData = new SkillData(playerStats[unitCurrentTurn].baseSkill);
+
             targetSelector.SetActive(true);
+
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
                 enemyChosen += 1;
@@ -384,7 +391,7 @@ public class CombatManager : MonoBehaviour
 
         float maxSpeed = 0.0f;
         float currentSpeed = 0.0f;
-        GameObject fastestCharacter = null;
+        GameObject fastestCharacter = new GameObject();
         foreach(GameObject character in allCharacters)
         {
             if (playerStats.ContainsKey(character))
@@ -489,12 +496,12 @@ public class CombatManager : MonoBehaviour
     {
         skillToUse = skillName;
         timeToSelect = true;
-        
     }
 
     IEnumerator PlayerAttackCoroutine(SkillData skillData)
     {
-        unitCurrentTurn.transform.LookAt(EnemyOne.transform);
+        //int enemyIndex = (int)(enemyChosen % enemyObjects.Count);
+        //unitCurrentTurn.transform.LookAt(enemyObjects[enemyIndex].transform.position);
 
         //yield return new WaitForSeconds(0.1f);
 
@@ -515,6 +522,8 @@ public class CombatManager : MonoBehaviour
 
         GameObject vfx = Instantiate(skillData.vfx, spawnPoint, unitCurrentTurn.transform.rotation);
         vfx.transform.localScale *= 2;
+        //int enemyIndex = (int)(enemyChosen % enemyObjects.Count);
+        //vfx.transform.LookAt(enemyObjects[enemyIndex].transform.position);
         Destroy(vfx, 2.5f);
 
         state = BattleState.CALCULATING;
@@ -527,6 +536,75 @@ public class CombatManager : MonoBehaviour
     {
         turnMarker.transform.position = unitCurrentTurn.transform.position;
         turnMarker.SetActive(true);
+
+        var playersGOs = playerStats.Keys.ToList();
+        var playerIndex = Random.Range(0, playersGOs.Count);
+        var randomSelected = playersGOs[playerIndex];
+        unitCurrentTurn.transform.LookAt(randomSelected.transform);
+
+        targetSelector.transform.position = randomSelected.transform.position;
+        targetSelector.SetActive(true);
+
+        StartCoroutine(EnemyAttackCoroutine(randomSelected, playerIndex));
+
         //menuController.EnableMenu(false);
+    }
+
+    IEnumerator EnemyAttackCoroutine(GameObject playerTarget, int playerIndex)
+    {
+        Vector3 originPos = unitCurrentTurn.transform.position;
+
+        yield return new WaitForSeconds(2f);
+
+        var enemyAnimator = unitCurrentTurn.GetComponent<Animator>();
+
+        enemyAnimator.SetTrigger("run");
+
+        float speed = 8f;
+
+        bool timeToRoll = true;
+
+        while(Vector3.Distance(unitCurrentTurn.transform.position, playerTarget.transform.position) > 3f)
+        {
+            unitCurrentTurn.transform.Translate(Vector3.forward * speed * Time.deltaTime);
+
+            if (Vector3.Distance(unitCurrentTurn.transform.position, playerTarget.transform.position) < 10f && timeToRoll)
+            {
+                timeToRoll = false;
+                enemyAnimator.SetTrigger("roll");
+            }
+
+            yield return null;
+        }
+
+        //while ((enemyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime % 1) < 1f)
+        //    yield return null;
+
+        enemyAnimator.SetTrigger("punch");
+
+        //while ((enemyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime % 1) < 1f)
+        //    yield return null;
+
+        yield return new WaitForSeconds(0.5f);
+
+        var targetPlayerBar = statusBars.FindAll(bar => bar.activeSelf)[playerIndex];
+        var lifeBarImage = targetPlayerBar.transform.Find("LifeBar").GetComponent<Image>();
+
+        float randomDamage = Random.Range(0.15f, 0.25f);
+
+        if (lifeBarImage.fillAmount < randomDamage)
+            lifeBarImage.fillAmount = 0;
+        else
+            lifeBarImage.fillAmount -= randomDamage;
+
+        yield return new WaitForSeconds(0.5f);
+
+        targetSelector.SetActive(false);
+        unitCurrentTurn.transform.position = originPos;
+
+        yield return new WaitForSeconds(0.5f);
+
+        state = BattleState.CALCULATING;
+        CalculateTurn();
     }
 }

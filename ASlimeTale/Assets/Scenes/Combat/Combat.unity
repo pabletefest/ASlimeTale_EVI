@@ -2724,6 +2724,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 437150383}
     m_Modifications:
+    - target: {fileID: 123516, guid: dcde2d0bed1ee664da8c5d34f2a04ae8, type: 3}
+      propertyPath: m_Name
+      value: MagicBar
+      objectReference: {fileID: 0}
     - target: {fileID: 164852, guid: dcde2d0bed1ee664da8c5d34f2a04ae8, type: 3}
       propertyPath: m_Name
       value: BarraMonstruoMiddleTop
@@ -2731,6 +2735,10 @@ PrefabInstance:
     - target: {fileID: 164852, guid: dcde2d0bed1ee664da8c5d34f2a04ae8, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 185786, guid: dcde2d0bed1ee664da8c5d34f2a04ae8, type: 3}
+      propertyPath: m_Name
+      value: LifeBar
       objectReference: {fileID: 0}
     - target: {fileID: 11426768, guid: dcde2d0bed1ee664da8c5d34f2a04ae8, type: 3}
       propertyPath: m_Sprite
@@ -3546,6 +3554,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 437150383}
     m_Modifications:
+    - target: {fileID: 123516, guid: dcde2d0bed1ee664da8c5d34f2a04ae8, type: 3}
+      propertyPath: m_Name
+      value: MagicBar
+      objectReference: {fileID: 0}
     - target: {fileID: 164852, guid: dcde2d0bed1ee664da8c5d34f2a04ae8, type: 3}
       propertyPath: m_Name
       value: BarraMonstruoMiddleBot
@@ -3553,6 +3565,10 @@ PrefabInstance:
     - target: {fileID: 164852, guid: dcde2d0bed1ee664da8c5d34f2a04ae8, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 185786, guid: dcde2d0bed1ee664da8c5d34f2a04ae8, type: 3}
+      propertyPath: m_Name
+      value: LifeBar
       objectReference: {fileID: 0}
     - target: {fileID: 11441464, guid: dcde2d0bed1ee664da8c5d34f2a04ae8, type: 3}
       propertyPath: screenSpaceOptions.yPosition
@@ -3697,6 +3713,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 437150383}
     m_Modifications:
+    - target: {fileID: 123516, guid: dcde2d0bed1ee664da8c5d34f2a04ae8, type: 3}
+      propertyPath: m_Name
+      value: MagicBar
+      objectReference: {fileID: 0}
     - target: {fileID: 164852, guid: dcde2d0bed1ee664da8c5d34f2a04ae8, type: 3}
       propertyPath: m_Name
       value: BarraMonstruoBot
@@ -3704,6 +3724,10 @@ PrefabInstance:
     - target: {fileID: 164852, guid: dcde2d0bed1ee664da8c5d34f2a04ae8, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 185786, guid: dcde2d0bed1ee664da8c5d34f2a04ae8, type: 3}
+      propertyPath: m_Name
+      value: LifeBar
       objectReference: {fileID: 0}
     - target: {fileID: 11441464, guid: dcde2d0bed1ee664da8c5d34f2a04ae8, type: 3}
       propertyPath: screenSpaceOptions.yPosition

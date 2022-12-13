@@ -66,7 +66,13 @@ public class DataManager : MonoBehaviour
         alreadyInit= true;
     }
 
-    public MonsterInfo getTeamMemberByName(string monsterName) => monstersTeam[monsterName];
+    public MonsterInfo getTeamMemberByName(string monsterName)
+    {
+        if (monstersTeam.ContainsKey(monsterName))
+            return monstersTeam[monsterName];
+
+        return new MonsterInfo(monsterName);
+    }
 
     public List<string> getMonstersTeamNames() => monstersTeam.Keys.ToList();   
 
