@@ -857,7 +857,14 @@ public class CombatManager : MonoBehaviour
                 go.SetActive(true);
                 if (go.name.Equals("Enemies"))
                 {
-                    go.transform.Find(enemyName).gameObject.SetActive(false);
+                    GameObject player = GameObject.Find("Slime");
+                    Vector3 newPos = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z);
+                    newPos.z -= 10;
+                    player.transform.position = newPos;
+                    // go.transform.Find(enemyName).gameObject.SetActive(false);
+                    go.transform.Find(enemyName).gameObject.GetComponent<Collider>().enabled = false;
+
+                    DataManager.InstanceDB.lastBattleWon = true;
                 }
             }
         };
