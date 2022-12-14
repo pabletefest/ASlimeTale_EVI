@@ -18,8 +18,6 @@ public class DataManager : MonoBehaviour
     //    set => monstersTeam[key] = value;
     //}
 
-    public bool lastBattleWon = false;
-
     void Awake()
     {
         if (InstanceDB && InstanceDB != this)

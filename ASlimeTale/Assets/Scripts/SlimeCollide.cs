@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SlimeCollide : MonoBehaviour
@@ -13,14 +12,7 @@ public class SlimeCollide : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (DataManager.InstanceDB.lastBattleWon)
-        {
-            string lastEnemy = PlayerPrefs.GetString("FoughtEnemy");
-            DataManager.InstanceDB.lastBattleWon = false;
-            GameObject enemyGO = GameObject.Find(lastEnemy);
-            SkinnedMeshRenderer renderer = enemyGO.transform.Find("Body").GetComponent<SkinnedMeshRenderer>();
-            StartCoroutine(ShadingUtilities.FadeOutGameObjectCoroutine(renderer));
-        }
+        
     }
 
     private void OnTriggerEnter(Collider other)
