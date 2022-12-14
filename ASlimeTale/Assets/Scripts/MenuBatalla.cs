@@ -264,7 +264,7 @@ public class MenuBatalla : MonoBehaviour
         actionSelector.SetActive(enabled);
     }
 
-    public void EnableItmeSelection(bool enabled)
+    public void EnableItemSelection(bool enabled)
     {
         itemSelector.SetActive(enabled);
     }

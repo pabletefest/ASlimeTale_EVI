@@ -20,6 +20,6 @@ MonoBehaviour:
   baseAttack: 30
   baseDefense: 30
   baseMagic: 10
-  baseResistance: 10
+  baseResistance: 30
   baseSpeed: 70
   weakness: 1

@@ -561,12 +561,14 @@ public class CombatManager : MonoBehaviour
 
     void PlayerAttackCallback(string skillName)
     {
+        menuController.EnableMenu(false);
         skillToUse = skillName;
         timeToSelect = true;
     }
 
     void PlayerAutoAttackCallback()
     {
+        menuController.EnableMenu(false);
         skillToUse = "Attack";
         timeToSelect = true;
     }
@@ -630,7 +632,7 @@ public class CombatManager : MonoBehaviour
 
 
             //DAMAGE FORMULA: (magia del jugador + poderSkill)*2 - resistenciaEnemigo.
-            uint damage = (uint)(Random.Range(0.8f, 1.2f) * ((playerStats[unitCurrentTurn].baseMagic + skillData.power) - enemyStats[enemyAttacked].baseResistance));
+            uint damage = (uint)(Random.Range(0.8f, 1.2f) * ((playerStats[unitCurrentTurn].baseMagic + skillData.power) - enemyStats[enemyAttacked].baseResistance)*0.8);
 
             enemyHPs[enemyIndex] -= damage;
 
@@ -670,13 +672,12 @@ public class CombatManager : MonoBehaviour
 
         menuController.EnableMenu(false);
         turnMarker.SetActive(false);
-        menuController.ResetBattleMenu();
 
         string playerDisplayName = unitCurrentTurn.name.Substring(0, unitCurrentTurn.name.Length - 7);
         feedback.text = playerDisplayName + " ataca.";
         int enemyIndex = (int)(enemyChosen % enemyObjects.Count);
 
-        float damage = (playerStats[unitCurrentTurn].baseAttack / 3) * Random.Range(0.8f, 1.2f);
+        uint damage = (uint)(Random.Range(0.8f, 1.2f) * ((playerStats[unitCurrentTurn].baseAttack + 20) - enemyStats[enemyAttacked].baseDefense) * 0.8f);
 
         enemyHPs[enemyIndex] -= (uint) damage;
 
@@ -714,7 +715,7 @@ public class CombatManager : MonoBehaviour
         targetSelector.SetActive(false);
         unitCurrentTurn.transform.position = originPos;
 
-        feedback.text = enemyDisplayName + " ha recibido " + (int) damage + " puntos de daño.";
+        feedback.text = enemyDisplayName + " ha recibido " + damage + " puntos de daño.";
         if (enemyHPs[enemyIndex] <= 0 || enemyHPs[enemyIndex] > 2000)
         {
             enemyAnim.SetTrigger("die");
@@ -801,11 +802,11 @@ public class CombatManager : MonoBehaviour
         var targetPlayerBar = statusBars.FindAll(bar => bar.activeSelf)[playerIndex];
         var lifeBarImage = targetPlayerBar.transform.Find("LifeBar").GetComponent<Image>();
 
-        float randomDamage = Random.Range(0.15f, 0.25f);
+        uint damage = (uint)(Random.Range(0.8f, 1.2f) * ((enemyStats[unitCurrentTurn].baseAttack + 30) - playerStats[playerTarget].baseDefense*0.5));
 
-        feedback.text = playerDisplayName + " ha recibido " + (int) (randomDamage * 100) + " puntos de daño";
+        feedback.text = playerDisplayName + " ha recibido " + damage + " puntos de daño";
 
-        if (lifeBarImage.fillAmount < randomDamage)
+        if (lifeBarImage.fillAmount < damage/100f)
         {
             yield return new WaitForSeconds(1f);
             lifeBarImage.fillAmount = 0;
@@ -825,7 +826,7 @@ public class CombatManager : MonoBehaviour
             
         }
         else
-            lifeBarImage.fillAmount -= randomDamage;
+            lifeBarImage.fillAmount -= damage/100f;
 
         yield return new WaitForSeconds(0.5f);
 
