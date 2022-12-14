@@ -36,6 +36,8 @@ public class MenuBatalla : MonoBehaviour
 
     public event Action<string> onSkillSelected;
 
+    public event Action onAttackSelected;
+
     public string currentPlayerName = "Slime";
 
     // Start is called before the first frame update
@@ -80,6 +82,10 @@ public class MenuBatalla : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                if(currentAction == 0)
+                {
+                    onAttackSelected?.Invoke();
+                }
                 if (currentAction == 1)
                 {
                     EnableActionSelection(false);

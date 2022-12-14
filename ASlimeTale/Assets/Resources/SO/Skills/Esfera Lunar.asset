@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc7d46a0fe5dcb94eb5c197596b4f669, type: 3}
   m_Name: Esfera Lunar
   m_EditorClassIdentifier: 
-  skillName: 
-  power: 0
-  precision: 0
-  mpCost: 0
-  type: 0
-  sideEffect: 0
-  effectChance: 0
-  vfx: {fileID: 0}
-  castZone: 0
+  skillName: Esfera Lunar
+  power: 50
+  precision: 100
+  mpCost: 10
+  type: 6
+  sideEffect: 7
+  effectChance: 1
+  vfx: {fileID: 1381080491605798, guid: 4ece5ddd79579204f99eae242a0dbf9d, type: 3}
+  castZone: 1

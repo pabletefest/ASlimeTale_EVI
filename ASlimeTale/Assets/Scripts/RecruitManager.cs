@@ -40,7 +40,14 @@ public class RecruitManager : MonoBehaviour
                 var sceneGOs = SceneManager.GetActiveScene().GetRootGameObjects();
 
                 foreach (var go in sceneGOs)
-                    go.SetActive(true);
+                    if (go.name != monsterName)
+                    {
+                        go.SetActive(true);
+                        if (go.name.Equals("Monsters"))
+                        {
+                            go.transform.Find(monsterName).gameObject.SetActive(false);
+                        }
+                    }
             };
         }
     }

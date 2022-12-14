@@ -101,6 +101,7 @@ public class CombatManager : MonoBehaviour
 
     List<GameObject> allCharacters = new List<GameObject>();
     List<GameObject> enemyObjects = new List<GameObject>();
+    List<GameObject> playersGOs = new List<GameObject>();
     bool timeToSelect = false;
 
     public BattleState state;
@@ -118,9 +119,14 @@ public class CombatManager : MonoBehaviour
 
     private List<uint> enemyHPs = new List<uint>();
 
+    int deadPlayers = 0;
+
+    string enemyName;
+
     // Start is called before the first frame update
     void Start()
     {
+        enemyName = PlayerPrefs.GetString("FoughtEnemy");
         state = BattleState.START;
         StartCoroutine(SetupBattle());
     }
@@ -132,13 +138,7 @@ public class CombatManager : MonoBehaviour
         {
             if (!unitCurrentTurn || skillToUse == "")
                 return;
-
-            SkillData skillData = DataManager.InstanceDB.getTeamMemberByName(playerStats[unitCurrentTurn].monsterName).Skills[skillToUse];
-            //SkillSO skill = skillData..Find(x => x.skillName == skillName);
-
-            if (skillData is null) // Default skill if something wrong occurred
-                skillData = new SkillData(playerStats[unitCurrentTurn].baseSkill);
-
+          
             targetSelector.SetActive(true);
 
             if (Input.GetKeyDown(KeyCode.RightArrow))
@@ -151,10 +151,23 @@ public class CombatManager : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                if (skillToUse != "Attack") { 
+                    SkillData skillData = DataManager.InstanceDB.getTeamMemberByName(playerStats[unitCurrentTurn].monsterName).Skills[skillToUse];
+                    //SkillSO skill = skillData..Find(x => x.skillName == skillName);
+
+                    if (skillData is null) // Default skill if something wrong occurred
+                        skillData = new SkillData(playerStats[unitCurrentTurn].baseSkill);
+                    StartCoroutine(PlayerAttackCoroutine(skillData));
+                }
+                else
+                {
+                    StartCoroutine(PlayerAutoAttackCoroutine());
+                }
                 timeToSelect = false;
                 targetSelector.SetActive(false);
-                StartCoroutine(PlayerAttackCoroutine(skillData));
             }
+
+
             int enemyIndex = (int) (enemyChosen % enemyObjects.Count);
             enemyAttacked = enemyObjects[enemyIndex];
             targetSelector.transform.position = enemyAttacked.transform.position;
@@ -165,16 +178,25 @@ public class CombatManager : MonoBehaviour
         {
             targetSelector.SetActive(false);
         }
+        if(state == BattleState.LOST)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                SceneManager.LoadScene("Menu");
+            }
+        }
     }
 
     void OnEnable()
     {
         menuController.onSkillSelected += PlayerAttackCallback;
+        menuController.onAttackSelected += PlayerAutoAttackCallback;
     }
 
     void OnDisabled()
     {
         menuController.onSkillSelected -= PlayerAttackCallback;
+        menuController.onAttackSelected -= PlayerAutoAttackCallback;
     }
 
     void InstantiatePlayers()
@@ -205,6 +227,7 @@ public class CombatManager : MonoBehaviour
                     playerStats.Add(PlayerOne, players[0]);
 
                     PlayerOne.GetComponent<CapsuleCollider>().isTrigger = false;
+                    playersGOs.Add(PlayerOne);
 
                     camera1Player.SetActive(true);
                 }
@@ -227,6 +250,8 @@ public class CombatManager : MonoBehaviour
 
                     PlayerOne.GetComponent<CapsuleCollider>().isTrigger = false;
                     PlayerTwo.GetComponent<CapsuleCollider>().isTrigger = false;
+                    playersGOs.Add(PlayerOne);
+                    playersGOs.Add(PlayerTwo);
 
                     camera2Players.SetActive(true);
                 }
@@ -257,6 +282,10 @@ public class CombatManager : MonoBehaviour
                     PlayerOne.GetComponent<CapsuleCollider>().isTrigger = false;
                     PlayerTwo.GetComponent<CapsuleCollider>().isTrigger = false;
                     PlayerThree.GetComponent<CapsuleCollider>().isTrigger = false;
+
+                    playersGOs.Add(PlayerOne);
+                    playersGOs.Add(PlayerTwo);
+                    playersGOs.Add(PlayerThree);
 
                     camera3Players.SetActive(true);
 
@@ -296,6 +325,12 @@ public class CombatManager : MonoBehaviour
                     PlayerTwo.GetComponent<CapsuleCollider>().isTrigger = false;
                     PlayerThree.GetComponent<CapsuleCollider>().isTrigger = false;
                     PlayerFour.GetComponent<CapsuleCollider>().isTrigger = false;
+
+                    playersGOs.Add(PlayerOne);
+                    playersGOs.Add(PlayerTwo);
+                    playersGOs.Add(PlayerThree);
+                    playersGOs.Add(PlayerFour);
+
                     camera4Players.SetActive(true);
                 }
                 break;
@@ -459,22 +494,22 @@ public class CombatManager : MonoBehaviour
         switch (players.Count)
         {
             case 1:
-                allCharacters.Add(PlayerOne);
+                if(playersGOs[0] != null) allCharacters.Add(PlayerOne);
                 break;
             case 2:
-                allCharacters.Add(PlayerOne);
-                allCharacters.Add(PlayerTwo);
+                if (playersGOs[0] != null) allCharacters.Add(PlayerOne);
+                if (playersGOs[1] != null) allCharacters.Add(PlayerTwo);
                 break;
             case 3:
-                allCharacters.Add(PlayerOne);
-                allCharacters.Add(PlayerTwo);
-                allCharacters.Add(PlayerThree);
+                if (playersGOs[0] != null) allCharacters.Add(PlayerOne);
+                if (playersGOs[1] != null) allCharacters.Add(PlayerTwo);
+                if (playersGOs[2] != null) allCharacters.Add(PlayerThree);
                 break;
             case 4:
-                allCharacters.Add(PlayerOne);
-                allCharacters.Add(PlayerTwo);
-                allCharacters.Add(PlayerThree);
-                allCharacters.Add(PlayerFour);
+                if (playersGOs[0] != null) allCharacters.Add(PlayerOne);
+                if (playersGOs[1] != null) allCharacters.Add(PlayerTwo);
+                if (playersGOs[2] != null) allCharacters.Add(PlayerThree);
+                if (playersGOs[3] != null) allCharacters.Add(PlayerFour);
                 break;
         }
 
@@ -522,6 +557,12 @@ public class CombatManager : MonoBehaviour
     void PlayerAttackCallback(string skillName)
     {
         skillToUse = skillName;
+        timeToSelect = true;
+    }
+
+    void PlayerAutoAttackCallback()
+    {
+        skillToUse = "Attack";
         timeToSelect = true;
     }
 
@@ -604,12 +645,90 @@ public class CombatManager : MonoBehaviour
         yield return new WaitForSeconds(3f);
     }
 
+    IEnumerator PlayerAutoAttackCoroutine()
+    {
+        Animator playerAnim = unitCurrentTurn.GetComponent<Animator>();
+        Animator enemyAnim = enemyAttacked.GetComponent<Animator>();
+
+        menuController.EnableMenu(false);
+        menuController.ResetBattleMenu();
+
+        string playerDisplayName = unitCurrentTurn.name.Substring(0, unitCurrentTurn.name.Length - 7);
+        feedback.text = playerDisplayName + " ataca.";
+        int enemyIndex = (int)(enemyChosen % enemyObjects.Count);
+
+        enemyHPs[enemyIndex] -= playerStats[unitCurrentTurn].baseAttack;
+
+        var playersGOs = playerStats.Keys.ToList();
+
+        yield return new WaitForSeconds(1.5f);
+
+        Vector3 originPos = unitCurrentTurn.transform.position;
+
+        yield return new WaitForSeconds(2f);
+
+        var enemyAnimator = unitCurrentTurn.GetComponent<Animator>();
+
+        playerAnim.SetTrigger("run");
+        string enemyDisplayName = enemyObjects[enemyIndex].name.Substring(0, enemyObjects[enemyIndex].name.Length - 7);
+
+        float speed = 8f;
+
+        while (Vector3.Distance(unitCurrentTurn.transform.position, enemyAttacked.transform.position) > 3f)
+        {
+            unitCurrentTurn.transform.Translate(Vector3.forward * speed * Time.deltaTime);
+
+            yield return null;
+        }
+
+        //while ((enemyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime % 1) < 1f)
+        //    yield return null;
+
+        playerAnim.SetTrigger("hit");
+
+        //while ((enemyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime % 1) < 1f)
+        //    yield return null;
+
+        yield return new WaitForSeconds(0.5f);
+        enemyAnim.SetTrigger("getHit");
+
+        yield return new WaitForSeconds(0.5f);
+
+        targetSelector.SetActive(false);
+        unitCurrentTurn.transform.position = originPos;
+
+        feedback.text = enemyDisplayName + " ha recibido " + playerStats[unitCurrentTurn].baseAttack + " puntos de daño.";
+        enemyAnim.SetTrigger("getHit");
+        if (enemyHPs[enemyIndex] <= 0 || enemyHPs[enemyIndex] > 2000)
+        {
+            enemyAnim.SetTrigger("die");
+            yield return new WaitForSeconds(2f);
+            feedback.text = enemyDisplayName + " ha sido derrotado.";
+            enemyObjects[enemyIndex].SetActive(false);
+            allCharacters.Remove(enemyObjects[enemyIndex]);
+            enemyObjects.RemoveAt(enemyIndex);
+            enemyHPs.RemoveAt(enemyIndex);
+        }
+
+        //vfx.transform.LookAt(enemyObjects[enemyIndex].transform.position);
+
+        yield return new WaitForSeconds(1f);
+        state = BattleState.CALCULATING;
+        CalculateTurn();
+
+        yield return new WaitForSeconds(3f);
+    }
+
     void EnemyTurn()
     {
         turnMarker.SetActive(false);
-        var playersGOs = playerStats.Keys.ToList();
         var playerIndex = Random.Range(0, playersGOs.Count);
         var randomSelected = playersGOs[playerIndex];
+        while(randomSelected == null)
+        {
+            playerIndex = Random.Range(0, playersGOs.Count);
+            randomSelected = playersGOs[playerIndex];
+        }
         unitCurrentTurn.transform.LookAt(randomSelected.transform);
 
         StartCoroutine(EnemyAttackCoroutine(randomSelected, playerIndex));
@@ -626,6 +745,8 @@ public class CombatManager : MonoBehaviour
         yield return new WaitForSeconds(2f);
 
         var enemyAnimator = unitCurrentTurn.GetComponent<Animator>();
+
+        var indexOfPlayer = playersGOs.IndexOf(playerTarget);
 
         enemyAnimator.SetTrigger("run");
         string enemyDisplayName = unitCurrentTurn.name.Substring(0, unitCurrentTurn.name.Length - 7);
@@ -673,7 +794,19 @@ public class CombatManager : MonoBehaviour
             yield return new WaitForSeconds(1f);
             lifeBarImage.fillAmount = 0;
             playerAnimator.SetTrigger("die");
+            playersGOs[indexOfPlayer] = null;
+
+            allCharacters.Remove(playerTarget);
             feedback.text = playerDisplayName + " ha sido derrotado.";
+            yield return new WaitForSeconds(1f);
+            deadPlayers += 1;
+            if(deadPlayers == players.Count)
+            {
+                state = BattleState.LOST;
+                feedback.text = "Todo tu equipo ha sido derrotado.";
+                Lose();
+            }
+            
         }
         else
             lifeBarImage.fillAmount -= randomDamage;
@@ -684,9 +817,12 @@ public class CombatManager : MonoBehaviour
         unitCurrentTurn.transform.position = originPos;
 
         yield return new WaitForSeconds(0.5f);
-
-        state = BattleState.CALCULATING;
-        CalculateTurn();
+        if(state != BattleState.LOST)
+        {
+            state = BattleState.CALCULATING;
+            CalculateTurn();
+        }
+        
     }
 
     void Win()
@@ -698,7 +834,22 @@ public class CombatManager : MonoBehaviour
             var sceneGOs = SceneManager.GetActiveScene().GetRootGameObjects();
 
             foreach (var go in sceneGOs)
+            {
                 go.SetActive(true);
+                if (go.name.Equals("Enemies"))
+                {
+                    go.transform.Find(enemyName).gameObject.SetActive(false);
+                }
+            }
         };
+    }
+
+    void Lose()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Cursor.visible = true;
+            SceneManager.LoadScene("Menu");
+        }
     }
 }

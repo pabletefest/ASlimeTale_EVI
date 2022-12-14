@@ -21,12 +21,11 @@ public class SlimeCollide : MonoBehaviour
         {
             case "Monster":
                 PlayerPrefs.SetString("RecruitableMonster", other.name);
-                other.gameObject.SetActive(false);
                 LoadAdditiveSceneAsync("Reclutar");
                 break;
 
             case "Enemy":
-                other.gameObject.SetActive(false);
+                PlayerPrefs.SetString("FoughtEnemy", other.name);
                 LoadAdditiveSceneAsync("Combat");
                 break;
 
