@@ -651,13 +651,16 @@ public class CombatManager : MonoBehaviour
         Animator enemyAnim = enemyAttacked.GetComponent<Animator>();
 
         menuController.EnableMenu(false);
+        turnMarker.SetActive(false);
         menuController.ResetBattleMenu();
 
         string playerDisplayName = unitCurrentTurn.name.Substring(0, unitCurrentTurn.name.Length - 7);
         feedback.text = playerDisplayName + " ataca.";
         int enemyIndex = (int)(enemyChosen % enemyObjects.Count);
 
-        enemyHPs[enemyIndex] -= playerStats[unitCurrentTurn].baseAttack;
+        float damage = (playerStats[unitCurrentTurn].baseAttack / 3) * Random.Range(0.8f, 1.2f);
+
+        enemyHPs[enemyIndex] -= (uint) damage;
 
         var playersGOs = playerStats.Keys.ToList();
 
@@ -665,11 +668,7 @@ public class CombatManager : MonoBehaviour
 
         Vector3 originPos = unitCurrentTurn.transform.position;
 
-        yield return new WaitForSeconds(2f);
-
-        var enemyAnimator = unitCurrentTurn.GetComponent<Animator>();
-
-        playerAnim.SetTrigger("run");
+        playerAnim.SetBool("run", true);
         string enemyDisplayName = enemyObjects[enemyIndex].name.Substring(0, enemyObjects[enemyIndex].name.Length - 7);
 
         float speed = 8f;
@@ -677,9 +676,9 @@ public class CombatManager : MonoBehaviour
         while (Vector3.Distance(unitCurrentTurn.transform.position, enemyAttacked.transform.position) > 3f)
         {
             unitCurrentTurn.transform.Translate(Vector3.forward * speed * Time.deltaTime);
-
             yield return null;
         }
+        playerAnim.SetBool("run", false);
 
         //while ((enemyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime % 1) < 1f)
         //    yield return null;
@@ -697,8 +696,7 @@ public class CombatManager : MonoBehaviour
         targetSelector.SetActive(false);
         unitCurrentTurn.transform.position = originPos;
 
-        feedback.text = enemyDisplayName + " ha recibido " + playerStats[unitCurrentTurn].baseAttack + " puntos de daño.";
-        enemyAnim.SetTrigger("getHit");
+        feedback.text = enemyDisplayName + " ha recibido " + (int) damage + " puntos de daño.";
         if (enemyHPs[enemyIndex] <= 0 || enemyHPs[enemyIndex] > 2000)
         {
             enemyAnim.SetTrigger("die");
