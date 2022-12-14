@@ -15,7 +15,7 @@ MonoBehaviour:
   skillName: Bola de Fuego
   power: 20
   precision: 100
-  mpCost: 10
+  mpCost: 40
   type: 1
   sideEffect: 1
   effectChance: 15

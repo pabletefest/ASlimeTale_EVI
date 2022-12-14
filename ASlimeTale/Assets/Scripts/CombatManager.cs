@@ -592,6 +592,7 @@ public class CombatManager : MonoBehaviour
         {
             feedback.text = playerDisplayName + " no tiene suficientes puntos de magia.";
             menuController.ResetBattleMenu();
+            menuController.EnableMenu(true);
         }    
         else
         {
@@ -632,7 +633,7 @@ public class CombatManager : MonoBehaviour
 
 
             //DAMAGE FORMULA: (magia del jugador + poderSkill)*2 - resistenciaEnemigo.
-            uint damage = (uint)(Random.Range(0.8f, 1.2f) * ((playerStats[unitCurrentTurn].baseMagic + skillData.power) - enemyStats[enemyAttacked].baseResistance)*0.8);
+            uint damage = (uint)(Random.Range(0.8f, 1.2f) * (playerStats[unitCurrentTurn].baseMagic + skillData.power) - enemyStats[enemyAttacked].baseResistance);
 
             enemyHPs[enemyIndex] -= damage;
 
@@ -802,7 +803,7 @@ public class CombatManager : MonoBehaviour
         var targetPlayerBar = statusBars.FindAll(bar => bar.activeSelf)[playerIndex];
         var lifeBarImage = targetPlayerBar.transform.Find("LifeBar").GetComponent<Image>();
 
-        uint damage = (uint)(Random.Range(0.8f, 1.2f) * ((enemyStats[unitCurrentTurn].baseAttack + 30) - playerStats[playerTarget].baseDefense*0.5));
+        uint damage = (uint)(Random.Range(0.8f, 1.2f) * ((enemyStats[unitCurrentTurn].baseAttack + 38) - playerStats[playerTarget].baseDefense*0.5));
 
         feedback.text = playerDisplayName + " ha recibido " + damage + " puntos de daño";
 
@@ -820,7 +821,7 @@ public class CombatManager : MonoBehaviour
             if(deadPlayers == players.Count)
             {
                 state = BattleState.LOST;
-                feedback.text = "Todo tu equipo ha sido derrotado.";
+                feedback.text = "Todo tu equipo ha sido derrotado. Presiona Espacio para reiniciar.";
                 Lose();
             }
             

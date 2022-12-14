@@ -15,7 +15,7 @@ MonoBehaviour:
   skillName: Esfera Lunar
   power: 50
   precision: 100
-  mpCost: 10
+  mpCost: 40
   type: 6
   sideEffect: 7
   effectChance: 1

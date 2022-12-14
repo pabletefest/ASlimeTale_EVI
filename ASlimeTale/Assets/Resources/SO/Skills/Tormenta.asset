@@ -15,7 +15,7 @@ MonoBehaviour:
   skillName: Tormenta
   power: 80
   precision: 95
-  mpCost: 40
+  mpCost: 60
   type: 4
   sideEffect: 4
   effectChance: 10

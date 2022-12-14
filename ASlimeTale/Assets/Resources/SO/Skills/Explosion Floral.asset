@@ -15,7 +15,7 @@ MonoBehaviour:
   skillName: Explosion Floral
   power: 40
   precision: 100
-  mpCost: 15
+  mpCost: 50
   type: 9
   sideEffect: 3
   effectChance: 10
