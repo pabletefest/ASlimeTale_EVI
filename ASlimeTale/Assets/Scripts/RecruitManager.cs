@@ -15,6 +15,8 @@ public class RecruitManager : MonoBehaviour
     [SerializeField]
     private Text recruitText;
 
+    private bool canRecruit = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,7 +30,7 @@ public class RecruitManager : MonoBehaviour
     void Update()
     {
         //Provisional press enter to recruit
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && canRecruit)
         {
             //Add monster to team
             DataManager.InstanceDB.AddTeamMember(monsterName);
@@ -49,6 +51,25 @@ public class RecruitManager : MonoBehaviour
                         }
                     }
             };
+        }else if (Input.GetKeyDown(KeyCode.Space))
+        {
+            //SceneManager.LoadScene("LlanuraAfable");
+            AsyncOperation asyncOp = SceneManager.UnloadSceneAsync("Reclutar");
+            asyncOp.completed += (AsyncOperation op) => {
+
+                SceneManager.SetActiveScene(SceneManager.GetSceneByName("LlanuraAfable"));
+                var sceneGOs = SceneManager.GetActiveScene().GetRootGameObjects();
+
+                foreach (var go in sceneGOs)
+                    if (go.name != monsterName)
+                    {
+                        if (go.name.Equals("Slime"))
+                        {
+                            go.transform.position = new Vector3(go.transform.position.x + 3f, go.transform.position.y, go.transform.position.z);
+                        }
+                        go.SetActive(true);
+                    }
+            };
         }
     }
     void InstantiateMonster()
@@ -62,18 +83,65 @@ public class RecruitManager : MonoBehaviour
 		switch (monsterName)
 		{
             case "Cactoro":
-                dialogueText.text = "Ándale limo, dame unos tacos al pastor y me uniré a ti.";
-                recruitText.text = "Presiona Espacio para darle los tacos.";
+                if(PlayerPrefs.GetInt("enemiesBeaten") >= 2)
+                {
+                    canRecruit = true;
+                    dialogueText.text = "Ándale limo, dame unos tacos al pastor y me uniré a ti.";
+                    recruitText.text = "Presiona Espacio para darle los tacos.";
+                }
+                else
+                {
+                    int enemiesLeft = 2 - PlayerPrefs.GetInt("enemiesBeaten");
+                    if(enemiesLeft == 1)
+                    {
+                        dialogueText.text = "Ándale limo, te ves algo flojo. Derrota a " + enemiesLeft + " enemigo más y me uniré.";
+                        recruitText.text = "Presiona Espacio para volver al mapa.";
+                    }
+                    else
+                    {
+                        dialogueText.text = "Ándale limo, te ves algo flojo. Derrota a " + enemiesLeft + " enemigos más y me uniré.";
+                        recruitText.text = "Presiona Espacio para volver al mapa.";
+                    }
+                }
                 break;
 
             case "Abelago":
-                dialogueText.text = "Bzzz ¿Unirme a ti? ¡Perfecto! Necesito un compañero para irme de aventuras. Bzzz";
-                recruitText.text = "Presiona Espacio para contestarle 'Bzzz'.";
+                if (PlayerPrefs.GetInt("enemiesBeaten") >= 1)
+                {
+                    canRecruit = true;
+                    dialogueText.text = "Bzzz ¿Unirme a ti? ¡Perfecto! Necesito un compañero para irme de aventuras. Bzzz";
+                    recruitText.text = "Presiona Espacio para contestarle 'Bzzz'.";
+                }
+                else
+                {
+                    int enemiesLeft = 1 - PlayerPrefs.GetInt("enemiesBeaten");
+                    dialogueText.text = "Bzzz ¡Tengo miedo! Derrota a " + enemiesLeft + " enemigo más y me iré de aventura contigo.";
+                    recruitText.text = "Presiona Espacio para volver al mapa.";
+                }
                 break;
 
             case "Mudfish":
-                dialogueText.text = "Puedo ir contigo pero vas a tener que regarme a menudo.";
-                recruitText.text = "Presiona Espacio para tirarle un cubo de agua.";
+                if(PlayerPrefs.GetInt("enemiesBeaten") >= 3)
+                {
+                    canRecruit = true;
+                    dialogueText.text = "Puedo ir contigo pero vas a tener que regarme a menudo.";
+                    recruitText.text = "Presiona Espacio para tirarle un cubo de agua.";
+                }
+                else
+                {
+                    int enemiesLeft = 3 - PlayerPrefs.GetInt("enemiesBeaten");
+                    if (enemiesLeft == 1)
+                    {
+                        dialogueText.text = "Pareces un pez fuera del agua. Derrota a " + enemiesLeft + " enemigo más y me pensaré si voy contigo.";
+                        recruitText.text = "Presiona Espacio para volver al mapa.";
+                    }
+                    else
+                    {
+                        dialogueText.text = "Pareces un pez fuera del agua. Derrota a " + enemiesLeft + " enemigos más y me pensaré si voy contigo.";
+                        recruitText.text = "Presiona Espacio para volver al mapa.";
+                    }
+                }
+                
                 break;
         }
 	}

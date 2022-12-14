@@ -182,6 +182,7 @@ public class CombatManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                Destroy(GameObject.Find("DataManager"));
                 SceneManager.LoadScene("Menu");
             }
         }
@@ -342,7 +343,11 @@ public class CombatManager : MonoBehaviour
 
     void InstantiateEnemies()
     {
-        int enemyNumber = Random.Range(1, players.Count + 1);
+        int enemyNumber = 1 + PlayerPrefs.GetInt("enemiesBeaten");
+        if(enemyNumber > 4)
+        {
+            enemyNumber = 4;
+        }
         EnemySO enemy = Resources.Load<EnemySO>(string.Format($"SO/Enemies/Knight"));
         enemyStats = new Dictionary<GameObject, EnemySO>();
         switch (enemyNumber)
@@ -516,22 +521,22 @@ public class CombatManager : MonoBehaviour
         switch (enemyObjects.Count)
         {
             case 1:
-                if(enemyHPs[0] > 0 && enemyHPs[0] < 2000) allCharacters.Add(enemyObjects[0]);
+                if(enemyHPs[0] > 0 && enemyHPs[0] < 20000) allCharacters.Add(enemyObjects[0]);
                 break;
             case 2:
-                if (enemyHPs[0] > 0 && enemyHPs[0] < 2000) allCharacters.Add(enemyObjects[0]);
-                if (enemyHPs[1] > 0 && enemyHPs[1] < 2000) allCharacters.Add(enemyObjects[1]);
+                if (enemyHPs[0] > 0 && enemyHPs[0] < 20000) allCharacters.Add(enemyObjects[0]);
+                if (enemyHPs[1] > 0 && enemyHPs[1] < 20000) allCharacters.Add(enemyObjects[1]);
                 break;
             case 3:
-                if (enemyHPs[0] > 0 && enemyHPs[0] < 2000) allCharacters.Add(enemyObjects[0]);
-                if (enemyHPs[1] > 0 && enemyHPs[1] < 2000) allCharacters.Add(enemyObjects[1]);
-                if (enemyHPs[2] > 0 && enemyHPs[2] < 2000) allCharacters.Add(enemyObjects[2]);
+                if (enemyHPs[0] > 0 && enemyHPs[0] < 20000) allCharacters.Add(enemyObjects[0]);
+                if (enemyHPs[1] > 0 && enemyHPs[1] < 20000) allCharacters.Add(enemyObjects[1]);
+                if (enemyHPs[2] > 0 && enemyHPs[2] < 20000) allCharacters.Add(enemyObjects[2]);
                 break;
             case 4:
-                if (enemyHPs[0] > 0 && enemyHPs[0] < 2000) allCharacters.Add(enemyObjects[0]);
-                if (enemyHPs[1] > 0 && enemyHPs[1] < 2000) allCharacters.Add(enemyObjects[1]);
-                if (enemyHPs[2] > 0 && enemyHPs[2] < 2000) allCharacters.Add(enemyObjects[2]);
-                if (enemyHPs[3] > 0 && enemyHPs[3] < 2000) allCharacters.Add(enemyObjects[3]);
+                if (enemyHPs[0] > 0 && enemyHPs[0] < 20000) allCharacters.Add(enemyObjects[0]);
+                if (enemyHPs[1] > 0 && enemyHPs[1] < 20000) allCharacters.Add(enemyObjects[1]);
+                if (enemyHPs[2] > 0 && enemyHPs[2] < 20000) allCharacters.Add(enemyObjects[2]);
+                if (enemyHPs[3] > 0 && enemyHPs[3] < 20000) allCharacters.Add(enemyObjects[3]);
                 break;
         }
 
@@ -573,76 +578,89 @@ public class CombatManager : MonoBehaviour
 
         //yield return new WaitForSeconds(0.1f);
 
-        Animator playerAnim = unitCurrentTurn.GetComponent<Animator>();
-        Animator enemyAnim = enemyAttacked.GetComponent<Animator>();
-
-        playerAnim.SetTrigger("hit");
-
-        menuController.EnableMenu(false);
-        menuController.ResetBattleMenu();
-
-        // Wait until the animation played half way
-        while ((playerAnim.GetCurrentAnimatorStateInfo(0).normalizedTime % 1) < 0.5f)
-            yield return null;
-
-        Vector3 spawnPoint = new Vector3();
-        if (skillData.castZone == SkillSO.CastZone.PROJECTILE)
-        {
-            spawnPoint = unitCurrentTurn.transform.position;
-            spawnPoint.z += 1;
-            spawnPoint.y += 2;
-        }else if(skillData.castZone == SkillSO.CastZone.AREA){
-            spawnPoint = enemyAttacked.transform.position;
-        }else if(skillData.castZone == SkillSO.CastZone.SINGLE_UNIT_OTHER)
-        {
-            spawnPoint = enemyAttacked.transform.position;
-        }
-
-        GameObject vfx = Instantiate(skillData.vfx, spawnPoint, unitCurrentTurn.transform.rotation);
-        vfx.transform.localScale *= 2;
-        string playerDisplayName = unitCurrentTurn.name.Substring(0, unitCurrentTurn.name.Length - 7);
-        feedback.text = playerDisplayName + " ha lanzado " + skillData.skillName + ".";
-        int enemyIndex = (int)(enemyChosen % enemyObjects.Count);
-
-        enemyHPs[enemyIndex] -= skillData.power;
-
         var playersGOs = playerStats.Keys.ToList();
         var playerIndex = playersGOs.IndexOf(unitCurrentTurn);
         var targetPlayerBar = statusBars.FindAll(bar => bar.activeSelf)[playerIndex];
         var magicBarImage = targetPlayerBar.transform.Find("MagicBar").GetComponent<Image>();
+        string playerDisplayName = unitCurrentTurn.name.Substring(0, unitCurrentTurn.name.Length - 7);
 
-        float spellCost = 0.1f;
+        float spellCost = skillData.mpCost;
 
-        if (magicBarImage.fillAmount < spellCost)
-            magicBarImage.fillAmount = 0;
-        else
-            magicBarImage.fillAmount -= spellCost;
-
-        yield return new WaitForSeconds(1.5f);
-
-        string enemyDisplayName = enemyObjects[enemyIndex].name.Substring(0, enemyObjects[enemyIndex].name.Length - 7);
-        feedback.text = enemyDisplayName + " ha recibido " + skillData.power + " puntos de daño.";
-        enemyAnim.SetTrigger("getHit");
-        if (enemyHPs[enemyIndex] <= 0 || enemyHPs[enemyIndex] > 2000)
+        if (magicBarImage.fillAmount < spellCost/100f)
         {
-            enemyAnim.SetTrigger("die");
+            feedback.text = playerDisplayName + " no tiene suficientes puntos de magia.";
+            menuController.ResetBattleMenu();
+        }    
+        else
+        {
+            magicBarImage.fillAmount -= spellCost/100f;
+
+            Animator playerAnim = unitCurrentTurn.GetComponent<Animator>();
+            Animator enemyAnim = enemyAttacked.GetComponent<Animator>();
+
+            playerAnim.SetTrigger("hit");
+
+            menuController.EnableMenu(false);
+            menuController.ResetBattleMenu();
+
+            // Wait until the animation played half way
+            while ((playerAnim.GetCurrentAnimatorStateInfo(0).normalizedTime % 1) < 0.5f)
+                yield return null;
+
+            Vector3 spawnPoint = new Vector3();
+            if (skillData.castZone == SkillSO.CastZone.PROJECTILE)
+            {
+                spawnPoint = unitCurrentTurn.transform.position;
+                spawnPoint.z += 1;
+                spawnPoint.y += 2;
+            }
+            else if (skillData.castZone == SkillSO.CastZone.AREA)
+            {
+                spawnPoint = enemyAttacked.transform.position;
+            }
+            else if (skillData.castZone == SkillSO.CastZone.SINGLE_UNIT_OTHER)
+            {
+                spawnPoint = enemyAttacked.transform.position;
+            }
+
+            GameObject vfx = Instantiate(skillData.vfx, spawnPoint, unitCurrentTurn.transform.rotation);
+            vfx.transform.localScale *= 2;
+            feedback.text = playerDisplayName + " ha lanzado " + skillData.skillName + ".";
+            int enemyIndex = (int)(enemyChosen % enemyObjects.Count);
+
+
+            //DAMAGE FORMULA: (magia del jugador + poderSkill)*2 - resistenciaEnemigo.
+            uint damage = (uint)(Random.Range(0.8f, 1.2f) * ((playerStats[unitCurrentTurn].baseMagic + skillData.power) - enemyStats[enemyAttacked].baseResistance));
+
+            enemyHPs[enemyIndex] -= damage;
+
+            yield return new WaitForSeconds(1.5f);
+
+            string enemyDisplayName = enemyObjects[enemyIndex].name.Substring(0, enemyObjects[enemyIndex].name.Length - 7);
+            feedback.text = enemyDisplayName + " ha recibido " + damage + " puntos de daño.";
+            enemyAnim.SetTrigger("getHit");
+            if (enemyHPs[enemyIndex] <= 0 || enemyHPs[enemyIndex] > 2000)
+            {
+                enemyAnim.SetTrigger("die");
+                Destroy(vfx, 1f);
+                yield return new WaitForSeconds(2f);
+                feedback.text = enemyDisplayName + " ha sido derrotado.";
+                enemyObjects[enemyIndex].SetActive(false);
+                allCharacters.Remove(enemyObjects[enemyIndex]);
+                enemyObjects.RemoveAt(enemyIndex);
+                enemyHPs.RemoveAt(enemyIndex);
+            }
+
+            //vfx.transform.LookAt(enemyObjects[enemyIndex].transform.position);
             Destroy(vfx, 1f);
-            yield return new WaitForSeconds(2f);
-            feedback.text = enemyDisplayName + " ha sido derrotado.";
-            enemyObjects[enemyIndex].SetActive(false);
-            allCharacters.Remove(enemyObjects[enemyIndex]);
-            enemyObjects.RemoveAt(enemyIndex);
-            enemyHPs.RemoveAt(enemyIndex);
+
+            yield return new WaitForSeconds(1f);
+            state = BattleState.CALCULATING;
+            CalculateTurn();
+
+            yield return new WaitForSeconds(3f);
         }
-
-        //vfx.transform.LookAt(enemyObjects[enemyIndex].transform.position);
-        Destroy(vfx, 1f);
-
-        yield return new WaitForSeconds(1f);
-        state = BattleState.CALCULATING;
-        CalculateTurn();
-
-        yield return new WaitForSeconds(3f);
+        
     }
 
     IEnumerator PlayerAutoAttackCoroutine()
@@ -825,6 +843,8 @@ public class CombatManager : MonoBehaviour
 
     void Win()
     {
+        int enemiesBeatenTotal = PlayerPrefs.GetInt("enemiesBeaten") + 1;
+        PlayerPrefs.SetInt("enemiesBeaten", enemiesBeatenTotal);
         AsyncOperation asyncOp = SceneManager.UnloadSceneAsync("Combat");
         asyncOp.completed += (AsyncOperation op) => {
 
@@ -845,7 +865,7 @@ public class CombatManager : MonoBehaviour
     void Lose()
     {
         if (Input.GetKeyDown(KeyCode.Space))
-        {
+        { 
             Cursor.visible = true;
             SceneManager.LoadScene("Menu");
         }

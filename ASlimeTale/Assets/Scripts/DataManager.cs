@@ -33,8 +33,8 @@ public class DataManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (alreadyInit)
-            return;
+        //if (alreadyInit)
+        //    return;
 
         monstersTeam = new Dictionary<string, MonsterInfo>();
 

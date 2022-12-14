@@ -6,7 +6,7 @@ public class SlimeCollide : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        PlayerPrefs.SetInt("enemiesBeaten", 0);
     }
 
     // Update is called once per frame
