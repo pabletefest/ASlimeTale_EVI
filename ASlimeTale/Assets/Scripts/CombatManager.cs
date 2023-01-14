@@ -722,10 +722,13 @@ public class CombatManager : MonoBehaviour
             enemyAnim.SetTrigger("die");
             yield return new WaitForSeconds(2f);
             feedback.text = enemyDisplayName + " ha sido derrotado.";
-            enemyObjects[enemyIndex].SetActive(false);
-            allCharacters.Remove(enemyObjects[enemyIndex]);
-            enemyObjects.RemoveAt(enemyIndex);
-            enemyHPs.RemoveAt(enemyIndex);
+            //enemyObjects[enemyIndex].SetActive(false);
+            //SkinnedMeshRenderer renderer = enemyObjects[enemyIndex].transform.Find("Body").GetComponent<SkinnedMeshRenderer>();
+            //StartCoroutine(ShadingUtilities.FadeOutGameObjectCoroutine(renderer));
+            //yield return new WaitForSeconds(2f);
+            //allCharacters.Remove(enemyObjects[enemyIndex]);
+            //enemyObjects.RemoveAt(enemyIndex);
+            //enemyHPs.RemoveAt(enemyIndex);
         }
 
         //vfx.transform.LookAt(enemyObjects[enemyIndex].transform.position);
@@ -850,15 +853,27 @@ public class CombatManager : MonoBehaviour
         AsyncOperation asyncOp = SceneManager.UnloadSceneAsync("Combat");
         asyncOp.completed += (AsyncOperation op) => {
 
-            SceneManager.SetActiveScene(SceneManager.GetSceneByName("LlanuraAfable"));
+            //SceneManager.SetActiveScene(SceneManager.GetSceneByName("LlanuraAfable"));
             var sceneGOs = SceneManager.GetActiveScene().GetRootGameObjects();
+            GameObject playerGO = sceneGOs.Where(go => go.tag == "Player").First();
 
             foreach (var go in sceneGOs)
             {
                 go.SetActive(true);
                 if (go.name.Equals("Enemies"))
                 {
-                    go.transform.Find(enemyName).gameObject.SetActive(false);
+                    //go.transform.Find(enemyName).gameObject.SetActive(false);
+                    GameObject defeatedEnemy = go.transform.Find(enemyName).gameObject;
+                    defeatedEnemy.GetComponent<Collider>().enabled = false;
+                    //GameObject player = GameObject.Find("Slime").gameObject;
+                    playerGO.transform.LookAt(defeatedEnemy.transform);
+                    Vector3 newPos = new Vector3(playerGO.transform.position.x, playerGO.transform.position.y, defeatedEnemy.transform.position.z);
+                    newPos.z -= 5;
+                    playerGO.transform.localPosition = newPos;
+                    //GameObject.FindGameObjectWithTag("Player").transform.position -= new Vector3(0,0, -15);
+                    // go.transform.Find(enemyName).gameObject.SetActive(false);
+
+                    DataManager.InstanceDB.lastBattleWon = true;
                 }
             }
         };

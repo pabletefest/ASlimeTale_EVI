@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SlimeCollide : MonoBehaviour
@@ -12,7 +13,10 @@ public class SlimeCollide : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (DataManager.InstanceDB.lastBattleWon)
+        {
+            StartCoroutine(ShadingDieEnemyCoroutine());
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -47,5 +51,16 @@ public class SlimeCollide : MonoBehaviour
 
             SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
         };
+    }
+
+    private IEnumerator ShadingDieEnemyCoroutine()
+    {
+        string lastEnemy = PlayerPrefs.GetString("FoughtEnemy");
+        DataManager.InstanceDB.lastBattleWon = false;
+        GameObject enemyGO = GameObject.Find(lastEnemy);
+        enemyGO.GetComponent<Animator>().SetTrigger("die");
+        yield return new WaitForSeconds(2f);
+        SkinnedMeshRenderer renderer = enemyGO.transform.Find("Body").GetComponent<SkinnedMeshRenderer>();
+        StartCoroutine(ShadingUtilities.FadeOutGameObjectCoroutine(renderer));
     }
 }
