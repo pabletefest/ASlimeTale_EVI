@@ -26,6 +26,7 @@ public class SlimeCollide : MonoBehaviour
             case "Monster":
 
                 // Destroy to ensure enemy despawns if scene change happens before fading out finishes
+                StopCoroutine(ShadingDieEnemyCoroutine());
                 var lastEnemyFought = GameObject.Find(PlayerPrefs.GetString("FoughtEnemy"));
 
                 if (lastEnemyFought)
