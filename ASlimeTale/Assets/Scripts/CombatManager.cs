@@ -175,6 +175,13 @@ public class CombatManager : MonoBehaviour
                 timeToSelect = false;
                 targetSelector.SetActive(false);
             }
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                timeToSelect = false;
+                targetSelector.SetActive(false);
+                menuController.EnableMenu(true);
+                menuController.ResetBattleMenu();
+            }
 
 
             int enemyIndex = (int) (enemyChosen % enemyObjects.Count);
