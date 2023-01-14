@@ -930,6 +930,7 @@ public class CombatManager : MonoBehaviour
                     GameObject defeatedEnemy = go.transform.Find(enemyName).gameObject;
                     defeatedEnemy.SetActive(true);
                     defeatedEnemy.GetComponent<Collider>().enabled = false;
+                    defeatedEnemy.GetComponentInChildren<SpriteRenderer>().enabled = false;
                     //GameObject player = GameObject.Find("Slime").gameObject;
                     Vector3 newPos = new Vector3(playerGO.transform.position.x, playerGO.transform.position.y, playerGO.transform.position.z);
                     newPos.z -= 5;
