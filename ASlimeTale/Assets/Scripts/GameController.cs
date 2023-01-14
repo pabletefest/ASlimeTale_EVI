@@ -21,5 +21,9 @@ public class GameController : MonoBehaviour
         {
             boss.SetActive(true);
         }
+        else
+        {
+            boss.SetActive(false);
+        }
     }
 }
