@@ -723,12 +723,12 @@ public class CombatManager : MonoBehaviour
             yield return new WaitForSeconds(2f);
             feedback.text = enemyDisplayName + " ha sido derrotado.";
             //enemyObjects[enemyIndex].SetActive(false);
-            //SkinnedMeshRenderer renderer = enemyObjects[enemyIndex].transform.Find("Body").GetComponent<SkinnedMeshRenderer>();
-            //StartCoroutine(ShadingUtilities.FadeOutGameObjectCoroutine(renderer));
-            //yield return new WaitForSeconds(2f);
-            //allCharacters.Remove(enemyObjects[enemyIndex]);
-            //enemyObjects.RemoveAt(enemyIndex);
-            //enemyHPs.RemoveAt(enemyIndex);
+            SkinnedMeshRenderer renderer = enemyObjects[enemyIndex].transform.Find("Body").GetComponent<SkinnedMeshRenderer>();
+            StartCoroutine(ShadingUtilities.FadeOutGameObjectCoroutine(renderer));
+            yield return new WaitForSeconds(2f);
+            allCharacters.Remove(enemyObjects[enemyIndex]);
+            enemyObjects.RemoveAt(enemyIndex);
+            enemyHPs.RemoveAt(enemyIndex);
         }
 
         //vfx.transform.LookAt(enemyObjects[enemyIndex].transform.position);
