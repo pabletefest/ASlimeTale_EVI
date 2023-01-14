@@ -13,6 +13,9 @@ public class PauseManager : MonoBehaviour
     [SerializeField]
     private AudioSource music;
 
+    [SerializeField]
+    private GameObject cameraSpin;
+
     private bool menuShown = false;
 
     // Start is called before the first frame update
@@ -32,6 +35,7 @@ public class PauseManager : MonoBehaviour
                 menuPausa.SetActive(true);
                 panel.SetActive(true);
                 menuShown = true;
+                cameraSpin.SetActive(false);
                 music.Pause();
             }
             else
@@ -40,6 +44,7 @@ public class PauseManager : MonoBehaviour
                 menuPausa.SetActive(false);
                 panel.SetActive(false);
                 menuShown = false;
+                cameraSpin.SetActive(false);
                 music.Play();
             }
         }

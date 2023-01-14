@@ -14,10 +14,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LlanuraAfable/LlanuraAfable.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 1
-    path: Assets/Scenes/Combat/Combat.unity
+  - enabled: 0
+    path: Assets/Scenes/Combat/Combat2.unity
     guid: 30506d6f1cb0241259018428797ca63a
   - enabled: 1
     path: Assets/Scenes/Reclutar/Reclutar.unity
     guid: c9d1a6450729946da883ce129a2f3c54
+  - enabled: 1
+    path: Assets/Scenes/Combat/Combat.unity
+    guid: c4c97cdc3d627274cb32ab9f415f50ec
   m_configObjects: {}

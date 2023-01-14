@@ -359,7 +359,7 @@ public class CombatManager : MonoBehaviour
 
     void InstantiateEnemies()
     {
-        string enemyName = PlayerPrefs.GetString("FoughtEnemy");
+        enemyName = PlayerPrefs.GetString("FoughtEnemy");
 
         int enemyNumber = 1 + PlayerPrefs.GetInt("enemiesBeaten");
         if(enemyNumber > 4)
@@ -900,6 +900,7 @@ public class CombatManager : MonoBehaviour
     {
         int enemiesBeatenTotal = PlayerPrefs.GetInt("enemiesBeaten") + 1;
         PlayerPrefs.SetInt("enemiesBeaten", enemiesBeatenTotal);
+        if (enemyName.Equals("Champion")) PlayerPrefs.SetInt("bossDefeated", 1);
 
         SceneManager.activeSceneChanged += (Scene oldScene, Scene newScene) => {
             var playerGO = GameObject.FindGameObjectWithTag("Player");
