@@ -8,10 +8,16 @@ public class GameController : MonoBehaviour
     [SerializeField]
     private GameObject boss;
 
+    [SerializeField]
+    private GameObject credits;
+
+    [SerializeField]
+    private GameObject cameraSpin;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        PlayerPrefs.SetInt("bossDefeated", 0);
     }
 
     // Update is called once per frame
@@ -25,5 +31,17 @@ public class GameController : MonoBehaviour
         {
             boss.SetActive(false);
         }
+        if (PlayerPrefs.GetInt("bossDefeated") == 1)
+        {
+            boss.SetActive(false);
+            cameraSpin.SetActive(false);
+            credits.SetActive(true);
+            Time.timeScale = 0;
+        }
+        else
+        {
+            credits.SetActive(false);
+        }
+
     }
 }
