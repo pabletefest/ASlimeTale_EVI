@@ -99,6 +99,15 @@ public class CombatManager : MonoBehaviour
     [SerializeField]
     private Text feedback;
 
+    [SerializeField]
+    private AudioSource audioSource;
+
+    [SerializeField]
+    private AudioClip combatTheme;
+
+    [SerializeField]
+    private AudioClip bossTheme;
+
     List<GameObject> allCharacters = new List<GameObject>();
     List<GameObject> enemyObjects = new List<GameObject>();
     List<GameObject> playersGOs = new List<GameObject>();
@@ -355,6 +364,8 @@ public class CombatManager : MonoBehaviour
         enemyStats = new Dictionary<GameObject, EnemySO>();
         if (enemyName.Contains("Knight"))
         {
+            audioSource.clip = combatTheme;
+            audioSource.Play();
             switch (enemyNumber)
             {
                 case 1:
@@ -436,6 +447,9 @@ public class CombatManager : MonoBehaviour
             }
         }else if (enemyName.Equals("Champion"))
         {
+            audioSource.clip = bossTheme;
+            audioSource.Play();
+            audioSource.volume = 0.1f;
             EnemyOne = Instantiate(knight.enemyPrefab, ThreeEnemiesPosition.transform.Find("PositionEnemy1").transform.position, ThreeEnemiesPosition.transform.Find("PositionEnemy1").transform.rotation);
             EnemyTwo = Instantiate(champion.enemyPrefab, ThreeEnemiesPosition.transform.Find("PositionEnemy2").transform.position, ThreeEnemiesPosition.transform.Find("PositionEnemy2").transform.rotation);
             EnemyThree = Instantiate(knight.enemyPrefab, ThreeEnemiesPosition.transform.Find("PositionEnemy3").transform.position, ThreeEnemiesPosition.transform.Find("PositionEnemy3").transform.rotation);
