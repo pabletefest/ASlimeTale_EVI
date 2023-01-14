@@ -3914,7 +3914,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 24300002, guid: 9c90905f05e9f1847a93f05d2013e9d7,
     type: 2}
   m_audioClip: {fileID: 8300000, guid: 9cd630d330687e94398aa100f72955fc, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 1
@@ -5843,6 +5843,9 @@ MonoBehaviour:
   turnMarker: {fileID: 1201341819}
   targetSelector: {fileID: 1730046114}
   feedback: {fileID: 56638295}
+  audioSource: {fileID: 1304892186}
+  combatTheme: {fileID: 8300000, guid: 9cd630d330687e94398aa100f72955fc, type: 3}
+  bossTheme: {fileID: 8300000, guid: c251e349b7e86a2489877199dc84df09, type: 3}
   state: 0
 --- !u!4 &2035550624
 Transform:
