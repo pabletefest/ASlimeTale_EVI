@@ -15,7 +15,7 @@ MonoBehaviour:
   enemyName: Champion
   enemyPrefab: {fileID: 9002518327607316424, guid: db79bd763d8a845d9a5cc52174549f17,
     type: 3}
-  baseMaxHP: 400
+  baseMaxHP: 450
   baseMaxMP: 0
   baseAttack: 50
   baseDefense: 50

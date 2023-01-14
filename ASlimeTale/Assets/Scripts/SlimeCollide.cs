@@ -58,10 +58,10 @@ public class SlimeCollide : MonoBehaviour
 
             SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
 
-            sceneGOs = SceneManager.GetActiveScene().GetRootGameObjects();
+            /*sceneGOs = SceneManager.GetActiveScene().GetRootGameObjects();
 
             foreach (var go in sceneGOs)
-                go.SetActive(true);
+                go.SetActive(true);*/
         };
     }
 

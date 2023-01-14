@@ -138,6 +138,7 @@ public class CombatManager : MonoBehaviour
     void Start()
     {
         enemyName = PlayerPrefs.GetString("FoughtEnemy");
+        //turnMarker.SetActive(false);
         state = BattleState.START;
         StartCoroutine(SetupBattle());
     }
