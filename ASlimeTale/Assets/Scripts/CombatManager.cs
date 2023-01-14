@@ -648,7 +648,9 @@ public class CombatManager : MonoBehaviour
                 Destroy(vfx, 1f);
                 yield return new WaitForSeconds(2f);
                 feedback.text = enemyDisplayName + " ha sido derrotado.";
-                enemyObjects[enemyIndex].SetActive(false);
+                SkinnedMeshRenderer renderer = enemyObjects[enemyIndex].transform.Find("Body").GetComponent<SkinnedMeshRenderer>();
+                StartCoroutine(ShadingUtilities.FadeOutGameObjectCoroutine(renderer, 0.1f));
+                yield return new WaitForSeconds(0.5f);
                 allCharacters.Remove(enemyObjects[enemyIndex]);
                 enemyObjects.RemoveAt(enemyIndex);
                 enemyHPs.RemoveAt(enemyIndex);
@@ -724,8 +726,8 @@ public class CombatManager : MonoBehaviour
             feedback.text = enemyDisplayName + " ha sido derrotado.";
             //enemyObjects[enemyIndex].SetActive(false);
             SkinnedMeshRenderer renderer = enemyObjects[enemyIndex].transform.Find("Body").GetComponent<SkinnedMeshRenderer>();
-            StartCoroutine(ShadingUtilities.FadeOutGameObjectCoroutine(renderer));
-            yield return new WaitForSeconds(2f);
+            StartCoroutine(ShadingUtilities.FadeOutGameObjectCoroutine(renderer, 0.1f));
+            yield return new WaitForSeconds(0.5f);
             allCharacters.Remove(enemyObjects[enemyIndex]);
             enemyObjects.RemoveAt(enemyIndex);
             enemyHPs.RemoveAt(enemyIndex);
