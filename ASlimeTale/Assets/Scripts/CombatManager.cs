@@ -343,91 +343,118 @@ public class CombatManager : MonoBehaviour
 
     void InstantiateEnemies()
     {
+        string enemyName = PlayerPrefs.GetString("FoughtEnemy");
+
         int enemyNumber = 1 + PlayerPrefs.GetInt("enemiesBeaten");
         if(enemyNumber > 4)
         {
             enemyNumber = 4;
         }
-        EnemySO enemy = Resources.Load<EnemySO>(string.Format($"SO/Enemies/Knight"));
+        EnemySO knight = Resources.Load<EnemySO>(string.Format($"SO/Enemies/Knight"));
+        EnemySO champion = Resources.Load<EnemySO>(string.Format($"SO/Enemies/Champion"));
         enemyStats = new Dictionary<GameObject, EnemySO>();
-        switch (enemyNumber)
+        if (enemyName.Contains("Knight"))
         {
-            case 1:
-                Debug.Log(enemy.enemyName);
-                Debug.Log(OneEnemyPosition.transform.Find("PositionEnemy1").transform.position);
-                Debug.Log(OneEnemyPosition.transform.Find("PositionEnemy1").transform.rotation);
-                EnemyOne = Instantiate(enemy.enemyPrefab, OneEnemyPosition.transform.Find("PositionEnemy1").transform.position, OneEnemyPosition.transform.Find("PositionEnemy1").transform.rotation);
-                EnemyOne.GetComponent<CapsuleCollider>().isTrigger = false;
-                enemyObjects.Add(EnemyOne);
-                enemyStats.Add(EnemyOne, enemy);
-                enemyHPs.Add(enemyStats[EnemyOne].baseMaxHP);
-                feedback.text = "¡Ha aparecido un enemigo!";
-                
-                allCharacters.Add(EnemyOne);
-                break;
-            case 2:
-                EnemyOne = Instantiate(enemy.enemyPrefab, TwoEnemiesPosition.transform.Find("PositionEnemy1").transform.position, TwoEnemiesPosition.transform.Find("PositionEnemy1").transform.rotation);
-                EnemyTwo = Instantiate(enemy.enemyPrefab, TwoEnemiesPosition.transform.Find("PositionEnemy2").transform.position, TwoEnemiesPosition.transform.Find("PositionEnemy2").transform.rotation);
-                EnemyOne.GetComponent<CapsuleCollider>().isTrigger = false;
-                EnemyTwo.GetComponent<CapsuleCollider>().isTrigger = false;
-                allCharacters.Add(EnemyOne);
-                allCharacters.Add(EnemyTwo);
-                enemyObjects.Add(EnemyOne);
-                enemyObjects.Add(EnemyTwo);
-                enemyStats.Add(EnemyOne, enemy);
-                enemyStats.Add(EnemyTwo, enemy);
-                enemyHPs.Add(enemyStats[EnemyOne].baseMaxHP);
-                enemyHPs.Add(enemyStats[EnemyTwo].baseMaxHP);
-                feedback.text = "¡Han aparecido dos enemigos!";
-                break;
-            case 3:
-                EnemyOne = Instantiate(enemy.enemyPrefab, ThreeEnemiesPosition.transform.Find("PositionEnemy1").transform.position, ThreeEnemiesPosition.transform.Find("PositionEnemy1").transform.rotation);
-                EnemyTwo = Instantiate(enemy.enemyPrefab, ThreeEnemiesPosition.transform.Find("PositionEnemy2").transform.position, ThreeEnemiesPosition.transform.Find("PositionEnemy2").transform.rotation);
-                EnemyThree = Instantiate(enemy.enemyPrefab, ThreeEnemiesPosition.transform.Find("PositionEnemy3").transform.position, ThreeEnemiesPosition.transform.Find("PositionEnemy3").transform.rotation);
-                EnemyOne.GetComponent<CapsuleCollider>().isTrigger = false;
-                EnemyTwo.GetComponent<CapsuleCollider>().isTrigger = false;
-                EnemyThree.GetComponent<CapsuleCollider>().isTrigger = false;
-                enemyObjects.Add(EnemyOne);
-                enemyObjects.Add(EnemyTwo);
-                enemyObjects.Add(EnemyThree);
-                allCharacters.Add(EnemyOne);
-                allCharacters.Add(EnemyTwo);
-                allCharacters.Add(EnemyThree);
-                enemyStats.Add(EnemyOne, enemy);
-                enemyStats.Add(EnemyTwo, enemy);
-                enemyStats.Add(EnemyThree, enemy);
-                enemyHPs.Add(enemyStats[EnemyOne].baseMaxHP);
-                enemyHPs.Add(enemyStats[EnemyTwo].baseMaxHP);
-                enemyHPs.Add(enemyStats[EnemyThree].baseMaxHP);
-                feedback.text = "¡Han aparecido tres enemigos!";
-                break;
-            case 4:
-                EnemyOne = Instantiate(enemy.enemyPrefab, FourEnemiesPosition.transform.Find("PositionEnemy1").transform.position, FourEnemiesPosition.transform.Find("PositionEnemy1").transform.rotation);
-                EnemyTwo = Instantiate(enemy.enemyPrefab, FourEnemiesPosition.transform.Find("PositionEnemy2").transform.position, FourEnemiesPosition.transform.Find("PositionEnemy2").transform.rotation);
-                EnemyThree = Instantiate(enemy.enemyPrefab, FourEnemiesPosition.transform.Find("PositionEnemy3").transform.position, FourEnemiesPosition.transform.Find("PositionEnemy3").transform.rotation);
-                EnemyFour = Instantiate(enemy.enemyPrefab, FourEnemiesPosition.transform.Find("PositionEnemy4").transform.position, FourEnemiesPosition.transform.Find("PositionEnemy4").transform.rotation);
-                EnemyOne.GetComponent<CapsuleCollider>().isTrigger = false;
-                EnemyTwo.GetComponent<CapsuleCollider>().isTrigger = false;
-                EnemyThree.GetComponent<CapsuleCollider>().isTrigger = false;
-                EnemyFour.GetComponent<CapsuleCollider>().isTrigger = false;
-                enemyObjects.Add(EnemyOne);
-                enemyObjects.Add(EnemyTwo);
-                enemyObjects.Add(EnemyThree);
-                enemyObjects.Add(EnemyFour);
-                allCharacters.Add(EnemyOne);
-                allCharacters.Add(EnemyTwo);
-                allCharacters.Add(EnemyThree);
-                allCharacters.Add(EnemyFour);
-                enemyStats.Add(EnemyOne, enemy);
-                enemyStats.Add(EnemyTwo, enemy);
-                enemyStats.Add(EnemyThree, enemy);
-                enemyStats.Add(EnemyFour, enemy);
-                enemyHPs.Add(enemyStats[EnemyOne].baseMaxHP);
-                enemyHPs.Add(enemyStats[EnemyTwo].baseMaxHP);
-                enemyHPs.Add(enemyStats[EnemyThree].baseMaxHP);
-                enemyHPs.Add(enemyStats[EnemyFour].baseMaxHP);
-                feedback.text = "¡Han aparecido cuatro enemigos!";
-                break;
+            switch (enemyNumber)
+            {
+                case 1:
+                    Debug.Log(knight.enemyName);
+                    Debug.Log(OneEnemyPosition.transform.Find("PositionEnemy1").transform.position);
+                    Debug.Log(OneEnemyPosition.transform.Find("PositionEnemy1").transform.rotation);
+                    EnemyOne = Instantiate(knight.enemyPrefab, OneEnemyPosition.transform.Find("PositionEnemy1").transform.position, OneEnemyPosition.transform.Find("PositionEnemy1").transform.rotation);
+                    EnemyOne.GetComponent<CapsuleCollider>().isTrigger = false;
+                    enemyObjects.Add(EnemyOne);
+                    enemyStats.Add(EnemyOne, knight);
+                    enemyHPs.Add(enemyStats[EnemyOne].baseMaxHP);
+                    feedback.text = "¡Ha aparecido un enemigo!";
+
+                    allCharacters.Add(EnemyOne);
+                    break;
+                case 2:
+                    EnemyOne = Instantiate(knight.enemyPrefab, TwoEnemiesPosition.transform.Find("PositionEnemy1").transform.position, TwoEnemiesPosition.transform.Find("PositionEnemy1").transform.rotation);
+                    EnemyTwo = Instantiate(knight.enemyPrefab, TwoEnemiesPosition.transform.Find("PositionEnemy2").transform.position, TwoEnemiesPosition.transform.Find("PositionEnemy2").transform.rotation);
+                    EnemyOne.GetComponent<CapsuleCollider>().isTrigger = false;
+                    EnemyTwo.GetComponent<CapsuleCollider>().isTrigger = false;
+                    allCharacters.Add(EnemyOne);
+                    allCharacters.Add(EnemyTwo);
+                    enemyObjects.Add(EnemyOne);
+                    enemyObjects.Add(EnemyTwo);
+                    enemyStats.Add(EnemyOne, knight);
+                    enemyStats.Add(EnemyTwo, knight);
+                    enemyHPs.Add(enemyStats[EnemyOne].baseMaxHP);
+                    enemyHPs.Add(enemyStats[EnemyTwo].baseMaxHP);
+                    feedback.text = "¡Han aparecido dos enemigos!";
+                    break;
+                case 3:
+                    EnemyOne = Instantiate(knight.enemyPrefab, ThreeEnemiesPosition.transform.Find("PositionEnemy1").transform.position, ThreeEnemiesPosition.transform.Find("PositionEnemy1").transform.rotation);
+                    EnemyTwo = Instantiate(knight.enemyPrefab, ThreeEnemiesPosition.transform.Find("PositionEnemy2").transform.position, ThreeEnemiesPosition.transform.Find("PositionEnemy2").transform.rotation);
+                    EnemyThree = Instantiate(knight.enemyPrefab, ThreeEnemiesPosition.transform.Find("PositionEnemy3").transform.position, ThreeEnemiesPosition.transform.Find("PositionEnemy3").transform.rotation);
+                    EnemyOne.GetComponent<CapsuleCollider>().isTrigger = false;
+                    EnemyTwo.GetComponent<CapsuleCollider>().isTrigger = false;
+                    EnemyThree.GetComponent<CapsuleCollider>().isTrigger = false;
+                    enemyObjects.Add(EnemyOne);
+                    enemyObjects.Add(EnemyTwo);
+                    enemyObjects.Add(EnemyThree);
+                    allCharacters.Add(EnemyOne);
+                    allCharacters.Add(EnemyTwo);
+                    allCharacters.Add(EnemyThree);
+                    enemyStats.Add(EnemyOne, knight);
+                    enemyStats.Add(EnemyTwo, knight);
+                    enemyStats.Add(EnemyThree, knight);
+                    enemyHPs.Add(enemyStats[EnemyOne].baseMaxHP);
+                    enemyHPs.Add(enemyStats[EnemyTwo].baseMaxHP);
+                    enemyHPs.Add(enemyStats[EnemyThree].baseMaxHP);
+                    feedback.text = "¡Han aparecido tres enemigos!";
+                    break;
+                case 4:
+                    EnemyOne = Instantiate(knight.enemyPrefab, FourEnemiesPosition.transform.Find("PositionEnemy1").transform.position, FourEnemiesPosition.transform.Find("PositionEnemy1").transform.rotation);
+                    EnemyTwo = Instantiate(knight.enemyPrefab, FourEnemiesPosition.transform.Find("PositionEnemy2").transform.position, FourEnemiesPosition.transform.Find("PositionEnemy2").transform.rotation);
+                    EnemyThree = Instantiate(knight.enemyPrefab, FourEnemiesPosition.transform.Find("PositionEnemy3").transform.position, FourEnemiesPosition.transform.Find("PositionEnemy3").transform.rotation);
+                    EnemyFour = Instantiate(knight.enemyPrefab, FourEnemiesPosition.transform.Find("PositionEnemy4").transform.position, FourEnemiesPosition.transform.Find("PositionEnemy4").transform.rotation);
+                    EnemyOne.GetComponent<CapsuleCollider>().isTrigger = false;
+                    EnemyTwo.GetComponent<CapsuleCollider>().isTrigger = false;
+                    EnemyThree.GetComponent<CapsuleCollider>().isTrigger = false;
+                    EnemyFour.GetComponent<CapsuleCollider>().isTrigger = false;
+                    enemyObjects.Add(EnemyOne);
+                    enemyObjects.Add(EnemyTwo);
+                    enemyObjects.Add(EnemyThree);
+                    enemyObjects.Add(EnemyFour);
+                    allCharacters.Add(EnemyOne);
+                    allCharacters.Add(EnemyTwo);
+                    allCharacters.Add(EnemyThree);
+                    allCharacters.Add(EnemyFour);
+                    enemyStats.Add(EnemyOne, knight);
+                    enemyStats.Add(EnemyTwo, knight);
+                    enemyStats.Add(EnemyThree, knight);
+                    enemyStats.Add(EnemyFour, knight);
+                    enemyHPs.Add(enemyStats[EnemyOne].baseMaxHP);
+                    enemyHPs.Add(enemyStats[EnemyTwo].baseMaxHP);
+                    enemyHPs.Add(enemyStats[EnemyThree].baseMaxHP);
+                    enemyHPs.Add(enemyStats[EnemyFour].baseMaxHP);
+                    feedback.text = "¡Han aparecido cuatro enemigos!";
+                    break;
+            }
+        }else if (enemyName.Equals("Champion"))
+        {
+            EnemyOne = Instantiate(knight.enemyPrefab, ThreeEnemiesPosition.transform.Find("PositionEnemy1").transform.position, ThreeEnemiesPosition.transform.Find("PositionEnemy1").transform.rotation);
+            EnemyTwo = Instantiate(champion.enemyPrefab, ThreeEnemiesPosition.transform.Find("PositionEnemy2").transform.position, ThreeEnemiesPosition.transform.Find("PositionEnemy2").transform.rotation);
+            EnemyThree = Instantiate(knight.enemyPrefab, ThreeEnemiesPosition.transform.Find("PositionEnemy3").transform.position, ThreeEnemiesPosition.transform.Find("PositionEnemy3").transform.rotation);
+            EnemyOne.GetComponent<CapsuleCollider>().isTrigger = false;
+            EnemyTwo.GetComponent<CapsuleCollider>().isTrigger = false;
+            EnemyThree.GetComponent<CapsuleCollider>().isTrigger = false;
+            enemyObjects.Add(EnemyOne);
+            enemyObjects.Add(EnemyTwo);
+            enemyObjects.Add(EnemyThree);
+            allCharacters.Add(EnemyOne);
+            allCharacters.Add(EnemyTwo);
+            allCharacters.Add(EnemyThree);
+            enemyStats.Add(EnemyOne, knight);
+            enemyStats.Add(EnemyTwo, champion);
+            enemyStats.Add(EnemyThree, knight);
+            enemyHPs.Add(enemyStats[EnemyOne].baseMaxHP);
+            enemyHPs.Add(enemyStats[EnemyTwo].baseMaxHP);
+            enemyHPs.Add(enemyStats[EnemyThree].baseMaxHP);
+            feedback.text = "¡Derrota a la campeona de la llanura!";
         }
     }
 
