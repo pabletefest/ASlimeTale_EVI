@@ -5,10 +5,10 @@ using UnityEngine;
 public class SlimeMove : MonoBehaviour
 {
     private CharacterController controller;
-    public float playerSpeed = 5.0f;
-    public float turnSpeed = 90.0f;
+    public float playerSpeed;
     private Animator anim;
     private Vector3 vel;
+    public GameObject camera;
 
     private void Start()
     {
@@ -21,13 +21,24 @@ public class SlimeMove : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
-        transform.Rotate(0, horizontalInput * turnSpeed * Time.deltaTime, 0);
+        Vector3 rightCamera = camera.transform.right;
+        Vector3 forwardCamera = camera.transform.forward;
 
-        vel = transform.forward * verticalInput * playerSpeed;
+        Vector3 movementDirection = rightCamera * horizontalInput + forwardCamera * verticalInput;
+        movementDirection += Physics.gravity;
 
-        controller.SimpleMove(vel);
+        movementDirection.Normalize();
 
-        if(vel != Vector3.zero)
+        vel = movementDirection * playerSpeed * Time.deltaTime;
+        controller.Move(vel);
+
+        if (movementDirection.x != 0 || movementDirection.z != 0)
+        {
+            movementDirection.y = 0;
+            transform.forward = movementDirection;       
+        }
+
+        if(vel.x != 0 || vel.z != 0)
 		{
             anim.SetBool("moving", true);
 		} else
