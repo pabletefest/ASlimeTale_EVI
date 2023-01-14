@@ -852,6 +852,18 @@ public class CombatManager : MonoBehaviour
     {
         int enemiesBeatenTotal = PlayerPrefs.GetInt("enemiesBeaten") + 1;
         PlayerPrefs.SetInt("enemiesBeaten", enemiesBeatenTotal);
+
+        SceneManager.activeSceneChanged += (Scene oldScene, Scene newScene) => {
+            var playerGO = GameObject.FindGameObjectWithTag("Player");
+            //var sceneGOs = SceneManager.GetActiveScene().GetRootGameObjects();
+            //var defeatedEnemy = sceneGOs.Where(go => go.name.Equals("Enemies")).First().transform.Find(PlayerPrefs.GetString("FoughtEnemy"));
+            Vector3 newPos = new Vector3(playerGO.transform.position.x, playerGO.transform.position.y, playerGO.transform.position.z);
+            newPos.z -= 10;
+            //playerGO.transform.localPosition = newPos;
+            playerGO.transform.position = newPos;
+            //playerGO.transform.LookAt(defeatedEnemy.transform);
+        };
+
         AsyncOperation asyncOp = SceneManager.UnloadSceneAsync("Combat");
         asyncOp.completed += (AsyncOperation op) => {
 
@@ -870,10 +882,10 @@ public class CombatManager : MonoBehaviour
                     GameObject defeatedEnemy = go.transform.Find(enemyName).gameObject;
                     defeatedEnemy.SetActive(true);
                     defeatedEnemy.GetComponent<Collider>().enabled = false;
-                    GameObject player = GameObject.Find("Slime").gameObject;
+                    //GameObject player = GameObject.Find("Slime").gameObject;
                     Vector3 newPos = new Vector3(playerGO.transform.position.x, playerGO.transform.position.y, playerGO.transform.position.z);
                     newPos.z -= 5;
-                    playerGO.transform.localPosition = newPos;
+                    //playerGO.transform.localPosition = newPos;
                     playerGO.transform.position = newPos;
                     //playerGO.transform.localPosition -= new Vector3(0, 0, -5 * (-1)); // Only god knows why this is positive
                     //playerGO.transform.position -= new Vector3(0, 0, 10 * (-1)); // Only god knows why this is positive
