@@ -24,6 +24,13 @@ public class SlimeCollide : MonoBehaviour
        switch (other.tag)
         {
             case "Monster":
+
+                // Destroy to ensure enemy despawns if scene change happens before fading out finishes
+                var lastEnemyFought = GameObject.Find(PlayerPrefs.GetString("FoughtEnemy"));
+
+                if (lastEnemyFought)
+                    Destroy(lastEnemyFought);
+
                 PlayerPrefs.SetString("RecruitableMonster", other.name);
                 LoadAdditiveSceneAsync("Reclutar");
                 break;
@@ -50,6 +57,11 @@ public class SlimeCollide : MonoBehaviour
                 go.SetActive(false);
 
             SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
+
+            sceneGOs = SceneManager.GetActiveScene().GetRootGameObjects();
+
+            foreach (var go in sceneGOs)
+                go.SetActive(true);
         };
     }
 

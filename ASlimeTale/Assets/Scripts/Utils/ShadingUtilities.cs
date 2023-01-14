@@ -83,6 +83,7 @@ public class ShadingUtilities
             yield return new WaitForSeconds(0.1f);
         }
 
-        GameObject.Destroy(renderer.gameObject);
+        if (renderer && renderer.gameObject)
+            GameObject.Destroy(renderer.gameObject);
     }
 }

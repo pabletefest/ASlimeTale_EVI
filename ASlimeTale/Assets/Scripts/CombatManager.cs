@@ -132,6 +132,8 @@ public class CombatManager : MonoBehaviour
 
     string enemyName;
 
+    bool markerAlreadyPositioned = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -187,6 +189,14 @@ public class CombatManager : MonoBehaviour
             int enemyIndex = (int) (enemyChosen % enemyObjects.Count);
             enemyAttacked = enemyObjects[enemyIndex];
             targetSelector.transform.position = enemyAttacked.transform.position;
+
+            if (!markerAlreadyPositioned)
+            {
+                var markerTransform = targetSelector.transform.Find("Marker");
+                markerTransform.position = new Vector3(markerTransform.position.x, markerTransform.position.y, markerTransform.position.z) + Vector3.up;
+                markerAlreadyPositioned = true;
+            }
+
             if(playerStats.ContainsKey(unitCurrentTurn))
                 unitCurrentTurn.transform.LookAt(enemyObjects[enemyIndex].transform.position);
         }
@@ -902,14 +912,17 @@ public class CombatManager : MonoBehaviour
         PlayerPrefs.SetInt("enemiesBeaten", enemiesBeatenTotal);
 
         SceneManager.activeSceneChanged += (Scene oldScene, Scene newScene) => {
-            var playerGO = GameObject.FindGameObjectWithTag("Player");
-            //var sceneGOs = SceneManager.GetActiveScene().GetRootGameObjects();
-            //var defeatedEnemy = sceneGOs.Where(go => go.name.Equals("Enemies")).First().transform.Find(PlayerPrefs.GetString("FoughtEnemy"));
-            Vector3 newPos = new Vector3(playerGO.transform.position.x, playerGO.transform.position.y, playerGO.transform.position.z);
-            newPos.z -= 10;
-            //playerGO.transform.localPosition = newPos;
-            playerGO.transform.position = newPos;
-            //playerGO.transform.LookAt(defeatedEnemy.transform);
+            if (newScene.name == "LlanuraAfable" && oldScene.name == "Combat")
+            {
+                var playerGO = GameObject.FindGameObjectWithTag("Player");
+                //var sceneGOs = SceneManager.GetActiveScene().GetRootGameObjects();
+                //var defeatedEnemy = sceneGOs.Where(go => go.name.Equals("Enemies")).First().transform.Find(PlayerPrefs.GetString("FoughtEnemy"));
+                Vector3 newPos = new Vector3(playerGO.transform.position.x, playerGO.transform.position.y, playerGO.transform.position.z);
+                newPos.z -= 10;
+                //playerGO.transform.localPosition = newPos;
+                playerGO.transform.position = newPos;
+                //playerGO.transform.LookAt(defeatedEnemy.transform);
+            }
         };
 
         AsyncOperation asyncOp = SceneManager.UnloadSceneAsync("Combat");
