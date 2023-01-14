@@ -138,6 +138,15 @@ public class MenuBatalla : MonoBehaviour
             {
                 onSkillSelected?.Invoke(skillTexts[currentAction].text);
             }
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                EnableActionSelection(true);
+                EnableSkillSelection(false);
+                currentAction = 0;
+                menuOpen = MenuType.ACTION;
+                UpdateActionSelection(currentAction);
+            }
         }
     }
 
