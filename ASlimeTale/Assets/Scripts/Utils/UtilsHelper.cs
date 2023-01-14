@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using UnityEngine;
 
 public static class UtilsHelper
 {
@@ -10,4 +12,9 @@ public static class UtilsHelper
     public const string MONSTER_SKILLS_KEY = "MonsterSkills";
 
     public static string FormatKeyString(string key, string name) => String.Format($"{key}_{name}");
+
+    public static IEnumerator DelayActionBySeconds(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+    }
 }

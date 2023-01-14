@@ -853,9 +853,11 @@ public class CombatManager : MonoBehaviour
         AsyncOperation asyncOp = SceneManager.UnloadSceneAsync("Combat");
         asyncOp.completed += (AsyncOperation op) => {
 
-            //SceneManager.SetActiveScene(SceneManager.GetSceneByName("LlanuraAfable"));
+            SceneManager.SetActiveScene(SceneManager.GetSceneByName("LlanuraAfable"));
             var sceneGOs = SceneManager.GetActiveScene().GetRootGameObjects();
+
             GameObject playerGO = sceneGOs.Where(go => go.tag == "Player").First();
+            playerGO.SetActive(true);
 
             foreach (var go in sceneGOs)
             {
@@ -864,13 +866,16 @@ public class CombatManager : MonoBehaviour
                 {
                     //go.transform.Find(enemyName).gameObject.SetActive(false);
                     GameObject defeatedEnemy = go.transform.Find(enemyName).gameObject;
+                    defeatedEnemy.SetActive(true);
                     defeatedEnemy.GetComponent<Collider>().enabled = false;
-                    //GameObject player = GameObject.Find("Slime").gameObject;
-                    playerGO.transform.LookAt(defeatedEnemy.transform);
-                    Vector3 newPos = new Vector3(playerGO.transform.position.x, playerGO.transform.position.y, defeatedEnemy.transform.position.z);
+                    GameObject player = GameObject.Find("Slime").gameObject;
+                    Vector3 newPos = new Vector3(playerGO.transform.position.x, playerGO.transform.position.y, playerGO.transform.position.z);
                     newPos.z -= 5;
                     playerGO.transform.localPosition = newPos;
-                    //GameObject.FindGameObjectWithTag("Player").transform.position -= new Vector3(0,0, -15);
+                    playerGO.transform.position = newPos;
+                    //playerGO.transform.localPosition -= new Vector3(0, 0, -5 * (-1)); // Only god knows why this is positive
+                    //playerGO.transform.position -= new Vector3(0, 0, 10 * (-1)); // Only god knows why this is positive
+                    //playerGO.transform.LookAt(defeatedEnemy.transform);
                     // go.transform.Find(enemyName).gameObject.SetActive(false);
 
                     DataManager.InstanceDB.lastBattleWon = true;
