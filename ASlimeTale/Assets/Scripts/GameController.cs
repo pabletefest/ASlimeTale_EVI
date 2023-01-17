@@ -36,6 +36,7 @@ public class GameController : MonoBehaviour
             boss.SetActive(false);
             cameraSpin.SetActive(false);
             credits.SetActive(true);
+            Cursor.visible = true;
             Time.timeScale = 0;
         }
         else
