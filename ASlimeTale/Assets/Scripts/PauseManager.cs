@@ -44,7 +44,7 @@ public class PauseManager : MonoBehaviour
                 menuPausa.SetActive(false);
                 panel.SetActive(false);
                 menuShown = false;
-                cameraSpin.SetActive(false);
+                cameraSpin.SetActive(true);
                 music.Play();
             }
         }
